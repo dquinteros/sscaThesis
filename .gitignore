@@ -1,3 +1,6 @@
+# Created by https://www.gitignore.io
+
+### C++ ###
 # Compiled Object files
 *.slo
 *.lo
@@ -26,3 +29,37 @@
 *.exe
 *.out
 *.app
+
+
+### Linux ###
+*~
+
+# KDE directory preferences
+.directory
+
+
+### SublimeText ###
+# cache files for sublime text
+*.tmlanguage.cache
+*.tmPreferences.cache
+*.stTheme.cache
+
+# workspace files are user-specific
+*.sublime-workspace
+
+# project files should be checked into the repository, unless a significant
+# proportion of contributors will probably not be using SublimeText
+# *.sublime-project
+
+# sftp configuration file
+sftp-config.json
+
+
+### Project Specific ###
+70X134H96/
+96X160H96/
+Test/
+Train/
+out/
+test_64x128_H96/
+train_64x128_H96/
