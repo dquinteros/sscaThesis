@@ -6,6 +6,8 @@
 #include <fstream.h>
 #include <vector.h>
 
+#include <boost/algorithm/string/split.hpp>
+
 using namespace std;
 
 class NeighbourhoodMatrix
@@ -20,8 +22,8 @@ public:
 	NeighbourhoodMatrix(vector<vector<double>> neighbourhood_matrix);
 	NeighbourhoodMatrix(vector<vector<double>> neighbourhood_matrix,int height,int width);
 	//Lectura & Escritura
-	vector<vector<double>> ReadNeighbourhoodMatrix(ifstream file);
-	void WriteNeigbourhoodMatrix(ofstream file);
+	void ReadNeighbourhoodMatrix(char* filename);
+	void WriteNeigbourhoodMatrix(char* filename);
 	//Sobrecarga de operador asignacion
 	NeighbourhoodMatrix& operator= (const NeighbourhoodMatrix&);
 	//Calculo de kurtosis & Skewness
