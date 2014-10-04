@@ -19,20 +19,21 @@ private:
 public:
 	//Constructor
 	NeighbourhoodMatrix(void);
-	NeighbourhoodMatrix(vector<vector<double>> neighbourhood_matrix);
-	NeighbourhoodMatrix(vector<vector<double>> neighbourhood_matrix,int height,int width);
+	NeighbourhoodMatrix(vector<vector<double>>);
+	NeighbourhoodMatrix(vector<vector<double>>,int,int);
+	NeighbourhoodMatrix(const NeighbourhoodMatrix&);
 	//Getters
-	vector<vector<double>> GetNeighbourhoodMatrix(void){return neighbourhood_matrix;}
-	int GetHeight(void){return height;}
-	int GetWidth(void){return width;}
+	vector<vector<double>> GetNeighbourhoodMatrix(void){return this->neighbourhood_matrix;}
+	int GetHeight(void){return this->height;}
+	int GetWidth(void){return this->width;}
 	//Lectura & Escritura
-	void ReadNeighbourhoodMatrix(char* filename) const;
-	void WriteNeigbourhoodMatrix(char* filename);
+	NeighbourhoodMatrix ReadNeighbourhoodMatrix(char*) const;
+	void WriteNeigbourhoodMatrix(char*);
 	//Sobrecarga de operador asignacion
 	NeighbourhoodMatrix& operator= (const NeighbourhoodMatrix&);
 	//Calculo de kurtosis & Skewness
-	double CalcularKurtosis(void);
-	double CalcularSkewness(void);
+	double CalculateKurtosis(void);
+	double CalculateSkewness(void);
 };
 
 #endif
