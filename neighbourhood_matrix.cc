@@ -31,7 +31,7 @@ NeighbourhoodMatrix::NeighbourhoodMatrix(const NeighbourhoodMatrix& neighbourhoo
 	this->neighbourhood_matrix = vector<vector<double>>(neighbourhood_matrix_.neighbourhood_matrix);
 }
 //Lectura
-NeighbourhoodMatrix NeighbourhoodMatrix::ReadNeighbourhoodMatrix(char* filename) const {
+NeighbourhoodMatrix NeighbourhoodMatrix::ReadNeighbourhoodMatrix(char* filename) {
 	
 	NeighbourhoodMatrix read_matrix;
 	ifstream file(filename);

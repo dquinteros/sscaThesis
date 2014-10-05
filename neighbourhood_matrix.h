@@ -27,7 +27,7 @@ public:
 	int GetHeight(void){return this->height;}
 	int GetWidth(void){return this->width;}
 	//Lectura & Escritura
-	NeighbourhoodMatrix ReadNeighbourhoodMatrix(char*) const;
+	NeighbourhoodMatrix ReadNeighbourhoodMatrix(char*);
 	void WriteNeigbourhoodMatrix(char*);
 	//Sobrecarga de operador asignacion
 	NeighbourhoodMatrix& operator= (const NeighbourhoodMatrix&);
