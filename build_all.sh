@@ -10,10 +10,10 @@ else
 	done
 	for i in *.cpp; do
 	    echo "compiling $i"
-	    g++ -std=c++11 -ggdb `pkg-config --cflags opencv` -o `basename $i .cpp` $i `pkg-config --libs opencv`;
+	    g++ -std=c++11 -ggdb `pkg-config --cflags opencv` -o `basename $i .cpp` $i `pkg-config --libs opencv` -l *;
 	done 
-	for i in *.cc; do
-	    echo "compiling $i"
-	    g++ -std=c++11 -ggdb `pkg-config --cflags opencv` -o `basename $i .cpp` $i `pkg-config --libs opencv`;
-	done
+#	for i in *.cc; do
+#	    echo "compiling $i"
+#	    g++ -std=c++11 -ggdb `pkg-config --cflags opencv` -o `basename $i .cpp` $i `pkg-config --libs opencv`;
+#	done
 fi

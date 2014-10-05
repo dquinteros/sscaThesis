@@ -31,39 +31,35 @@ NeighbourhoodMatrix::NeighbourhoodMatrix(const NeighbourhoodMatrix& neighbourhoo
 	this->neighbourhood_matrix = vector<vector<double>>(neighbourhood_matrix_.neighbourhood_matrix);
 }
 //Lectura
-NeighbourhoodMatrix NeighbourhoodMatrix::ReadNeighbourhoodMatrix(char* filename) {
+void NeighbourhoodMatrix::ReadNeighbourhoodMatrix(char* filename) {
 	
-	NeighbourhoodMatrix read_matrix;
 	ifstream file(filename);
 
 	if(!file)
 	{
 		fprintf( stderr, "ERROR: the specified file could not be loaded\n");
-		return read_matrix;
-	}
+		
+	}else{
+		
+		vector<double> matrix_line;
+		string file_line;	
 
-	
-	vector<double> matrix_line;
-	string file_line;	
-
-	while (getline(file, file_line))
-	{		
-		if (file_line[0]=='#'|| file_line[0]=='\0') continue;
-		istringstream is(file_line);
-		double point_probability;
-		while(is >> point_probability)
-		{
-		   matrix_line.push_back(point_probability);
+		while (getline(file, file_line))
+		{		
+			if (file_line[0]=='#'|| file_line[0]=='\0') continue;
+			istringstream is(file_line);
+			double point_probability;
+			while(is >> point_probability)
+			{
+				matrix_line.push_back(point_probability);
+			}
+			neighbourhood_matrix.push_back(matrix_line); 
+			matrix_line.clear(); 
 		}
-		read_matrix.neighbourhood_matrix.push_back(matrix_line); 
-		matrix_line.clear(); 
+		file.close();   
+		width =  neighbourhood_matrix.front().size();
+		height = neighbourhood_matrix.size();
 	}
-	file.close();   
-	read_matrix.width =  read_matrix.neighbourhood_matrix.front().size();
-	read_matrix.height = read_matrix.neighbourhood_matrix.size();
-
-
-	return read_matrix;
 }
 
 //Escritura
