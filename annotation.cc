@@ -37,47 +37,47 @@ Annotation::Annotation(const Annotation& annotation_)
 	this->object_center = vector<Point>(annotation_.object_center);
 }
 //Set image_filename
-void Annotation::SetImageFilename(string image_filename_)
+void Annotation::set_image_filename(string image_filename_)
 {
 	this->image_filename = image_filename_;
 }
 //Set image_width
-void Annotation::SetImageWidth(int image_width_)
+void Annotation::set_image_width(int image_width_)
 {
 	this->image_width = image_width_;
 }
 //Set image_height
-void Annotation::SetImageHeight(int image_height_)
+void Annotation::set_image_height(int image_height_)
 {
 	this->image_height = image_height_;
 }
 //Set object_number
-void Annotation::SetObjectNumber(int object_number_)
+void Annotation::set_object_number(int object_number_)
 {
 	this->object_number = object_number_;
 }
 //Set object_head_center
-void Annotation::SetObjectHeadCenter(vector<Point> object_head_center_)
+void Annotation::set_object_head_center(vector<Point> object_head_center_)
 {
 	this->object_head_center = object_head_center_;
 }
 //Set object_up_left
-void Annotation::SetObjectUpLeft(vector<Point> object_up_left_)
+void Annotation::set_object_up_left(vector<Point> object_up_left_)
 {
 	this->object_up_left = object_up_left_;
 }
 //Set object_down_right
-void Annotation::SetObjectDownRight(vector<Point> object_down_right_)
+void Annotation::set_object_down_right(vector<Point> object_down_right_)
 {
 	this->object_down_right = object_down_right_;
 }
 //Set object_center
-void Annotation::SetObjectCenter(vector<Point> object_center_)
+void Annotation::set_object_center(vector<Point> object_center_)
 {
 	this->object_center = object_center_;
 }
 //Letura
-void Annotation::ReadAnnotation(char* filename) {
+void Annotation::ReadAnnotation(string filename) {
 	
 	ifstream file(filename);
 
@@ -96,7 +96,8 @@ void Annotation::ReadAnnotation(char* filename) {
 
 			if (file_line[0]=='#'|| file_line[0]=='\0' || file_line[0]=='O') continue;
 
-			erase_all(file_line," \"()");
+			file_line.erase(remove_if(file_line,is_any_of(" \"()")),file_line.end());
+			//cout << file_line << endl;
 			split(splitted_line,file_line,is_any_of(":"),token_compress_on);
 
 			if ('B'==splitted_line.front()[0])
@@ -141,4 +142,16 @@ void Annotation::ReadAnnotation(char* filename) {
 			splitted_line.clear();
 		}		
 	}	
+}
+//Sobrecarga del operador de asignacion
+Annotation& Annotation::operator= (const Annotation &annotation_)
+{
+	image_filename = annotation_.image_filename;
+	image_width = annotation_.image_width;
+	image_height = annotation_.image_height;	
+	object_number = annotation_.object_number;
+	object_head_center = vector<Point>(annotation_.object_head_center);
+	object_up_left = vector<Point>(annotation_.object_up_left);
+	object_down_right = vector<Point>(annotation_.object_down_right);
+	object_center = vector<Point>(annotation_.object_center);
 }

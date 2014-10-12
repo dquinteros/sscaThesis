@@ -4,6 +4,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <math.h>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -23,17 +24,29 @@ public:
 	NeighbourhoodMatrix(vector<vector<double>>,int,int);
 	NeighbourhoodMatrix(const NeighbourhoodMatrix&);
 	//Getters
-	vector<vector<double>> GetNeighbourhoodMatrix(void){return this->neighbourhood_matrix;}
-	int GetHeight(void){return this->height;}
-	int GetWidth(void){return this->width;}
+	vector<vector<double>> get_neighbourhood_matrix(void){return this->neighbourhood_matrix;}
+	int get_height(void){return this->height;}
+	int get_width(void){return this->width;}
 	//Lectura & Escritura
-	void ReadNeighbourhoodMatrix(char*);
-	void WriteNeigbourhoodMatrix(char*);
+	void ReadNeighbourhoodMatrix(string);
+	void WriteNeigbourhoodMatrix(string);
 	//Sobrecarga de operador asignacion
 	NeighbourhoodMatrix& operator= (const NeighbourhoodMatrix&);
-	//Calculo de kurtosis & Skewness
+	//Calculo de RMS Deviation, Kurtosis & Skewness
+	double XMean(void);
+	double YMean(void);
+	double ZMean(void);
+	double CoefficientA(void);
+	double CoefficientB(void);
+	double CoefficientC(void);
+	double ResidualSurfaceSum(void);
+	double ResidualSurface(double,double);
+	double CalculateRMSDeviation(void);	
+	//double MardiasKurtosis(void);
 	double CalculateKurtosis(void);
 	double CalculateSkewness(void);
+	double CalculateKurtosisY(void);
+	//double CalculateKurtosisX(void);
 };
 
 #endif
