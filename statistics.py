@@ -9,15 +9,17 @@ ax2 = plt.subplot(222)
 ax4 = plt.subplot(224)
 
 #Make some sample data as a sum of two elliptical gaussians:
-x = range(200)
-y = range(200)
+x = range(3)
+y = range(3)
 
 X,Y = np.meshgrid(x,y)
 
-def twoD_gaussian(X,Y,A=1,xo=100,yo=100,sx=20,sy=10):
+def twoD_gaussian(X,Y,A=1,xo=100,yo=100,sx=1,sy=1):
     return A*np.exp(-(X-xo)**2/(2.*sx**2)-(Y-yo)**2/(2.*sy**2))
 
-Z = twoD_gaussian(X,Y) + twoD_gaussian(X,Y,A=0.4,yo=75)
+#Z = twoD_gaussian(X,Y,A=1, xo =1  , yo =1 )
+
+Z = np.loadtxt("gauss1.txt")
 
 ax2.imshow(Z) #plot it
 

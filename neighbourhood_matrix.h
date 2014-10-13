@@ -18,7 +18,7 @@ private:
 	int height;
 	int width;
 public:
-	//Constructor
+	//Constructores
 	NeighbourhoodMatrix(void);
 	NeighbourhoodMatrix(vector<vector<double>>);
 	NeighbourhoodMatrix(vector<vector<double>>,int,int);
@@ -32,7 +32,10 @@ public:
 	void WriteNeigbourhoodMatrix(string);
 	//Sobrecarga de operador asignacion
 	NeighbourhoodMatrix& operator= (const NeighbourhoodMatrix&);
-	//Calculo de RMS Deviation, Kurtosis & Skewness
+	//Calculo de la superficie residual
+	double CoefU(void);
+	double CoefV(void);
+	double CoefW(void);
 	double XMean(void);
 	double YMean(void);
 	double ZMean(void);
@@ -41,12 +44,25 @@ public:
 	double CoefficientC(void);
 	double ResidualSurfaceSum(void);
 	double ResidualSurface(double,double);
-	double CalculateRMSDeviation(void);	
-	//double MardiasKurtosis(void);
+	//Calculo de RMS Deviation, Kurtosis & Skewness
+	double CalculateRMSDeviation(void);
 	double CalculateKurtosis(void);
-	double CalculateSkewness(void);
+	double CalculateSkewness(void);	
+	//Proyecciones por eje;
+	vector<double> ProjectionY(void);
+	vector<double> ProjectionX(void);
+	//Centroide por eje
+	double CentroidY(void);
+	double CentroidX(void);
+	//Desviacion standar por eje
+	double StandardDeviationY(void);
+	double StandardDeviationX(void);
+	//Skewness por eje
+	double CalculateSkewnessY(void);
+	double CalculateSkewnessX(void);
+	//Kurtosis por eje
 	double CalculateKurtosisY(void);
-	//double CalculateKurtosisX(void);
+	double CalculateKurtosisX(void);
 };
 
 #endif

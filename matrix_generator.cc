@@ -36,7 +36,8 @@ double MatrixGenerator::GaussianSigma(double radius)
 //Gaussian
 double MatrixGenerator::Gaussian(double x, double radius, double sigma)
 {
-	return exp( -(((x-radius)/(sigma))*((x-radius)/(sigma)))/2.0 )/(sigma*sqrt(2*M_PI));
+	return exp( -(((x-radius)/(sigma))*((x-radius)/(sigma)))/2.0);
+
 }
 
 //Matriz gaussiana
@@ -62,8 +63,7 @@ void MatrixGenerator::GenerateGaussian(int radius, string filename)
 //Overload Matriz Gausiana + Sigma + Print Mode
 void MatrixGenerator::GenerateGaussian(int radius, double sigma, string filename)
 {
-	int size =  2 * ceil(6 * sigma) + 1;
-	radius = (size - 1)/2;
+	int size =  2 * radius + 1;	
 	double w_sum = 0.0;
 	vector<double> line = vector<double>();
 	for (double y = 0.0; y < size; y++)
@@ -81,7 +81,7 @@ void MatrixGenerator::GenerateGaussian(int radius, double sigma, string filename
 	{
 		for (double x = 0.0; x < size; x++)
 		{
-			this->matrix[x][y] /= w_sum;		
+			this->matrix[x][y] /= 1;//w_sum;		
 		}
 	}
 	if(filename.size()>0)

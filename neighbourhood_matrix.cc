@@ -94,6 +94,48 @@ NeighbourhoodMatrix& NeighbourhoodMatrix::operator= (const NeighbourhoodMatrix &
 	return (*this); 
 }
 
+//Coefficients u, v, w
+double NeighbourhoodMatrix::CoefU(void)
+{
+	double sum_coef = 0.0;
+	for (int x = 1; x <= width; x++)
+	{
+		for (int y = 1; y <= height; y++)
+		{
+			sum_coef += (x-1)*neighbourhood_matrix[y-1][x-1];
+		}	
+	}
+	return sum_coef;
+}
+//Coefficients u, v, w
+double NeighbourhoodMatrix::CoefV(void)
+{
+	double sum_coef = 0.0;
+	for (int x = 1; x <= width; x++)
+	{
+		for (int y = 1; y <= height; y++)
+		{
+			sum_coef += (y-1)*neighbourhood_matrix[y-1][x-1];
+		}	
+	}
+	return sum_coef;
+}
+
+//Coefficients u, v, w
+double NeighbourhoodMatrix::CoefW(void)
+{
+	double sum_coef = 0.0;
+	for (int x = 1; x <= width; x++)
+	{
+		for (int y = 1; y <= height; y++)
+		{
+			sum_coef += neighbourhood_matrix[y-1][x-1];
+		}	
+	}
+	return sum_coef;
+}
+
+
 //Media de X
 double NeighbourhoodMatrix::XMean(void)
 {	
@@ -117,6 +159,324 @@ double NeighbourhoodMatrix::ZMean(void)
 	}
 	return acumulador_mean_z/(height*width);
 }
+
+//Coeficiente A
+double NeighbourhoodMatrix::CoefficientA(void)
+{
+	double n = width;
+	double m = height;
+	double up = (7*m*n+m+n-5) * CoefW() - 6*(n+1) * CoefU() - 6*(m+1) * CoefV();
+	double down = m*n*(m+1)*(n+1);
+	return up/down;
+}
+//Coeficiente B
+double NeighbourhoodMatrix::CoefficientB(void)
+{
+	double n = width;
+	double m = height;
+	double up = CoefU()-((m-1)/2) * CoefW();
+	double down = m*n*(m-1)*(n+1);
+	return 12.0 * (up/down);
+}
+//Coeficiente C
+double NeighbourhoodMatrix::CoefficientC(void)
+{
+	double n = width;
+	double m = height;
+	double up = CoefV()-((m-1)/2) * CoefW();
+	double down = m*n*(m+1)*(n-1);
+	return 12.0 * (up/down);
+}
+
+//Sumatoria de la Superficie Residual
+double NeighbourhoodMatrix::ResidualSurfaceSum(void)
+{
+	double residual_surface = 0.0;
+	for (int x = 0.0; x < width; x++)
+	{
+		for (int y = 0.0; y < height; y++)
+		{
+			residual_surface += neighbourhood_matrix[y][x] - (CoefficientA() + CoefficientB() * x + CoefficientC() * y);
+		}	
+	}
+	return residual_surface;
+}
+
+//Superficie residual
+double NeighbourhoodMatrix::ResidualSurface(double x, double y)
+{
+	return neighbourhood_matrix[y][x] - (CoefficientA() + CoefficientB() * x + CoefficientC() * y);
+	//return neighbourhood_matrix[y][x];
+}
+
+//Calcular RMS Deviation
+double NeighbourhoodMatrix::CalculateRMSDeviation(void){
+	double nm = height*width;
+	double acumulador_sq = 0.0;
+	for (int x = 0.0; x < width; x++)
+	{
+		for (int y = 0.0; y < height; y++)
+		{
+			acumulador_sq += pow(ResidualSurface(x,y),2.0);
+		}	
+	} 
+	return sqrt(acumulador_sq);
+}
+
+//Calcular Kurtosis
+double NeighbourhoodMatrix::CalculateKurtosis(void)
+{
+	double mn = height*width;
+	double acumulador_sq = 0.0;
+	double acumulador_sku = 0.0;
+	for (int x = 0.0; x < width; x++)
+	{
+		for (int y = 0.0; y < height; y++)
+		{
+			acumulador_sku += pow(ResidualSurface(x,y),4.0);			
+		}
+	}
+	double sq_4 = pow(CalculateRMSDeviation(),4.0);
+	double sku = (1/(mn*sq_4))*acumulador_sku;
+	return sku;
+}
+
+//Calcular Skewness
+double NeighbourhoodMatrix::CalculateSkewness(void)
+{
+	double mn = height*width;
+	double acumulador_sq = 0.0;
+	double acumulador_ssk = 0.0;
+	for (int x = 0.0; x < width; x++)
+	{
+		for (int y = 0.0; y < height; y++)
+		{
+			acumulador_ssk += pow(ResidualSurface(x,y),3.0);			
+		}
+	}
+	double sq_3 = pow(CalculateRMSDeviation(),3.0);
+	double sku = (1/(mn*sq_3))*acumulador_ssk;
+	return sku;
+}
+
+//Proyeccion eje Y
+vector<double> NeighbourhoodMatrix::ProjectionY(void)
+{
+	vector<double> projection_y;
+	for (int y = 0; y < height; y++)
+	{
+		double suma_y = 0.0;
+		for (int x = 0; x < width; x++)
+		{	
+			suma_y += neighbourhood_matrix[y][x];
+		}
+		projection_y.push_back(suma_y);
+	}
+	return projection_y;
+}
+
+//Proyeccion eje X
+vector<double> NeighbourhoodMatrix::ProjectionX(void)
+{
+	vector<double> projection_x;
+	for (int x = 0; x < width; x++)
+	{
+		double suma_x = 0.0;
+		for (int y = 0; y < height; y++)
+		{	
+			suma_x += neighbourhood_matrix[y][x];
+		}
+		projection_x.push_back(suma_x);
+	}
+	return projection_x;
+}
+
+//Centroide eje Y
+double NeighbourhoodMatrix::CentroidY(void)
+{
+	vector<double> projection_y = vector<double>(ProjectionY());
+	int count = 0;
+	double upper_sum;
+	double bottom_sum;
+	for(double val : projection_y) {
+		upper_sum += val * count;
+		bottom_sum += val;
+		count++;
+	}
+
+	return upper_sum/bottom_sum;
+}
+
+//Centroide eje Y
+double NeighbourhoodMatrix::CentroidX(void)
+{
+	vector<double> projection_x = ProjectionX();
+	int count = 0;
+	double upper_sum;
+	double bottom_sum;
+	for(double val : projection_x) {
+		upper_sum += val * count;
+		bottom_sum += val;
+		count++;
+	}
+
+	return upper_sum/bottom_sum;
+}
+
+//Desviacion Estandar eje Y
+double NeighbourhoodMatrix::StandardDeviationY(void)
+{
+	double centroid_y = CentroidY();
+	vector<double> y2;
+	for (int i = 0; i < height; i++)
+	{
+		y2.push_back(pow(i - centroid_y,2.0));
+	}
+
+	vector<double> projection_y = vector<double>(ProjectionY());
+
+	double upper_sum;
+	double bottom_sum;
+	for (int i = 0; i < height; i++)
+	{
+		upper_sum += y2[i]*projection_y[i];
+		bottom_sum += projection_y[i];
+	}
+		
+	return sqrt(upper_sum/bottom_sum);
+
+}
+
+//Desviacion Estandar eje X
+double NeighbourhoodMatrix::StandardDeviationX(void)
+{
+	double centroid_x = CentroidX();
+	vector<double> x2;
+	for (int i = 0; i < width; i++)
+	{
+		x2.push_back(pow(i - centroid_x,2.0));
+	}
+
+	vector<double> projection_x = ProjectionX();
+
+	double upper_sum;
+	double bottom_sum;
+	for (int i = 0; i < width; i++)
+	{
+		upper_sum += x2[i] * projection_x[i];
+		bottom_sum += projection_x[i];
+	}
+		
+	return sqrt(upper_sum/bottom_sum);
+}
+
+//Calcular Kurtosis para la proyección del eje y
+double NeighbourhoodMatrix::CalculateSkewnessY(void)
+{
+	double centroid_y = CentroidY();
+    
+    vector<double> y4;
+	for (int i = 0; i < height; i++)
+	{
+		y4.push_back(pow(i - centroid_y,3.0));
+	}
+
+	vector<double> projection_y = vector<double>(ProjectionY());
+
+	double upper_sum = 0.0;
+	double bottom_sum = 0.0;
+	for (int i = 0; i < height; i++)
+	{
+		upper_sum += y4[i] * projection_y[i];
+		bottom_sum += projection_y[i];
+	}
+
+	double sd_y = StandardDeviationY();
+
+	return 	upper_sum/(bottom_sum * pow(sd_y,3.0));
+}
+
+//Calcular Kurtosis para la proyección del eje y
+double NeighbourhoodMatrix::CalculateSkewnessX(void)
+{	
+	double centroid_x = CentroidX();
+	   
+    vector<double> x4;
+	for (int i = 0; i < width; i++)
+	{
+		x4.push_back(pow(i - centroid_x,3.0));
+	}
+
+	vector<double> projection_x = ProjectionX();
+
+	double upper_sum;
+	double bottom_sum;
+	for (int i = 0; i < width; i++)
+	{
+		upper_sum += x4[i]*projection_x[i];
+		bottom_sum += projection_x[i];
+	}
+
+	double sd_x = StandardDeviationX();
+
+	return 	upper_sum/(bottom_sum * pow(sd_x,3.0));
+
+}	
+
+//Calcular Kurtosis para la proyección del eje y
+double NeighbourhoodMatrix::CalculateKurtosisY(void)
+{
+	double centroid_y = CentroidY();
+    
+    vector<double> y4;
+	for (int i = 0; i < height; i++)
+	{
+		y4.push_back(pow(i - centroid_y,4.0));
+	}
+
+	vector<double> projection_y = vector<double>(ProjectionY());
+
+	double upper_sum = 0.0;
+	double bottom_sum = 0.0;
+	for (int i = 0; i < height; i++)
+	{
+		upper_sum += y4[i] * projection_y[i];
+		bottom_sum += projection_y[i];
+	}
+
+	double sd_y = StandardDeviationY();
+
+	return 	upper_sum/(bottom_sum * pow(sd_y,4.0));
+}	
+
+//Calcular Kurtosis para la proyección del eje x
+double NeighbourhoodMatrix::CalculateKurtosisX(void)
+{	
+	double centroid_x = CentroidX();
+	   
+    vector<double> x4;
+	for (int i = 0; i < width; i++)
+	{
+		x4.push_back(pow(i - centroid_x,4.0));
+	}
+
+	vector<double> projection_x = ProjectionX();
+
+	double upper_sum;
+	double bottom_sum;
+	for (int i = 0; i < width; i++)
+	{
+		upper_sum += x4[i]*projection_x[i];
+		bottom_sum += projection_x[i];
+	}
+
+	double sd_x = StandardDeviationX();
+
+	return 	upper_sum/(bottom_sum * pow(sd_x,4.0));
+
+}
+
+/*
 //Coeficiente A
 double NeighbourhoodMatrix::CoefficientA(void)
 {
@@ -156,122 +516,4 @@ double NeighbourhoodMatrix::CoefficientC(void)
 	}
 	return coefficient_numerator/coefficient_denominator;
 }
-
-//Sumatoria de la Superficie Residual
-double NeighbourhoodMatrix::ResidualSurfaceSum(void)
-{
-	double residual_surface = 0.0;
-	for (int x = 0.0; x < width; x++)
-	{
-		for (int y = 0.0; y < height; y++)
-		{
-			residual_surface += neighbourhood_matrix[y][x] - CoefficientA() - CoefficientB() * x - CoefficientC() * y;
-		}	
-	}
-	return residual_surface;
-}
-
-//Superficie residual
-double NeighbourhoodMatrix::ResidualSurface(double x, double y)
-{
-	return neighbourhood_matrix[y][x] - CoefficientA() - CoefficientB() * x - CoefficientC() * y;
-	//return neighbourhood_matrix[y][x];
-}
-
-
-//Calcular RMS Deviation
-double NeighbourhoodMatrix::CalculateRMSDeviation(void){
-	double nm = height*width;
-	double acumulador_sq = 0.0;
-	for (int x = 0.0; x < width; x++)
-	{
-		for (int y = 0.0; y < height; y++)
-		{
-			acumulador_sq += pow(ResidualSurface(x,y),2.0);
-		}	
-	}
-	return sqrt((1/nm)*acumulador_sq);
-}
-//Mardias Kurtosis
-
-
-//Calcular Kurtosis
-double NeighbourhoodMatrix::CalculateKurtosis(void)
-{
-	double mn = height*width;
-	double acumulador_sq = 0.0;
-	double acumulador_sku = 0.0;
-	for (int x = 0.0; x < width; x++)
-	{
-		for (int y = 0.0; y < height; y++)
-		{
-			acumulador_sku += pow(ResidualSurface(x,y),4.0);			
-		}
-	}
-	double sq_4 = pow(CalculateRMSDeviation(),4.0);
-	double sku = (1/(mn*sq_4))*acumulador_sku;
-	return sku;
-}
-
-//Calcular Skewness
-double NeighbourhoodMatrix::CalculateSkewness(void)
-{
-	double mn = height*width;
-	double acumulador_sq = 0.0;
-	double acumulador_ssk = 0.0;
-	for (int x = 0.0; x < width; x++)
-	{
-		for (int y = 0.0; y < height; y++)
-		{
-			acumulador_ssk += pow(ResidualSurface(x,y),3.0);			
-		}
-	}
-	double sq_3 = pow(CalculateRMSDeviation(),3.0);
-	double sku = (1/(mn*sq_3))*acumulador_ssk;
-	return sku;
-}
-
-//Calcular Kurtosis para la proyección de y
-double NeighbourhoodMatrix::CalculateKurtosisY(void)
-{
-	vector<double> proyeccion_y;
-	for (int y = 0.0; y < height; y++)
-	{
-		double suma_y = 0.0;
-		for (int x = 0.0; x < width; x++)
-		{	
-			suma_y += neighbourhood_matrix[y][x];
-		}
-		proyeccion_y.push_back(suma_y);
-	}
- 
-    double sum_y_py = 0.0;
-    double sum_py = 0.0; 
-	for(int i = 0; i < proyeccion_y.size(); i++) {
-		sum_y_py += i * proyeccion_y[i];
-		sum_py += proyeccion_y[i];
-	}
-
-	double centroid_y = sum_y_py/sum_py;
-
-	double y_2 = pow(height - centroid_y,2.0);
-
-	double sd_sum;
-	for(double value : proyeccion_y) {
-		sd_sum += value*y_2;		 
-	}
-
-	double sd_y = sqrt(sd_sum/sum_py);
-
-	double y_4 = pow(height - centroid_y,4.0);
-
-	double sku_sum = 0.0;
-	for(double value : proyeccion_y) {
-		sku_sum += value*y_4;		 
-	}
-
-	return sku_sum/(sum_py * pow(sd_y,4.0));	
-
-}	 
-
-//double CalculateKurtosisX(void);
+*/
