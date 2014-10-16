@@ -52,8 +52,7 @@ if(percent<0||percent>100){
     return 0;
 }
 
-    /* Abrir archivos de entrada */
-
+/* Abrir archivos de entrada */
 img = imread(argv[1]);
 ants = antsread(string(argv[2]));
 int ant_c = 0;
@@ -150,8 +149,6 @@ for(;;)
             if( j == found.size() )
                 found_filtered.push_back(r); 
         }
-
-
 
         //std::cout << "(" << ant_info.at(4) << "," << ant_info.at(5) << ") = " << imagen[ant_info.at(4)][ant_info.at(5)] << std::endl;
         int verif = writescore(ant_info,filename, imagen, percent);

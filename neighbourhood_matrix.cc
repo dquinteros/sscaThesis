@@ -211,16 +211,16 @@ double NeighbourhoodMatrix::ResidualSurface(double x, double y)
 
 //Calcular RMS Deviation
 double NeighbourhoodMatrix::CalculateRMSDeviation(void){
-	double nm = height*width;
+	double nm = neighbourhood_matrix.size()*neighbourhood_matrix[0].size();
 	double acumulador_sq = 0.0;
-	for (int x = 0.0; x < width; x++)
+	for (double x = 0.0; x < width; x++)
 	{
-		for (int y = 0.0; y < height; y++)
+		for (double y = 0.0; y < height; y++)
 		{
 			acumulador_sq += pow(ResidualSurface(x,y),2.0);
 		}	
 	} 
-	return sqrt(acumulador_sq);
+	return sqrt(acumulador_sq/(nm-1));
 }
 
 //Calcular Kurtosis
@@ -229,9 +229,9 @@ double NeighbourhoodMatrix::CalculateKurtosis(void)
 	double mn = height*width;
 	double acumulador_sq = 0.0;
 	double acumulador_sku = 0.0;
-	for (int x = 0.0; x < width; x++)
+	for (double x = 0.0; x < width; x++)
 	{
-		for (int y = 0.0; y < height; y++)
+		for (double y = 0.0; y < height; y++)
 		{
 			acumulador_sku += pow(ResidualSurface(x,y),4.0);			
 		}
@@ -247,9 +247,9 @@ double NeighbourhoodMatrix::CalculateSkewness(void)
 	double mn = height*width;
 	double acumulador_sq = 0.0;
 	double acumulador_ssk = 0.0;
-	for (int x = 0.0; x < width; x++)
+	for (double x = 0.0; x < width; x++)
 	{
-		for (int y = 0.0; y < height; y++)
+		for (double y = 0.0; y < height; y++)
 		{
 			acumulador_ssk += pow(ResidualSurface(x,y),3.0);			
 		}

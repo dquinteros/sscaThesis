@@ -29,6 +29,10 @@ public:
 	void GenerateGaussian(int, double);
 	void GenerateGaussian(int, string);
 	void GenerateGaussian(int, double, string);
+	//Generador Tstudent
+	double Student2d(double, double, double, double);
+	void GenerateStudent(int, double);
+	void GenerateStudent(int, double, string);
 	//Escritura
 	void WriteMatrix(string);
 

@@ -81,7 +81,7 @@ void MatrixGenerator::GenerateGaussian(int radius, double sigma, string filename
 	{
 		for (double x = 0.0; x < size; x++)
 		{
-			this->matrix[x][y] /= 1;//w_sum;		
+			this->matrix[x][y] /= w_sum;		
 		}
 	}
 	if(filename.size()>0)
@@ -89,7 +89,41 @@ void MatrixGenerator::GenerateGaussian(int radius, double sigma, string filename
 		WriteMatrix(filename);
 	}	
 }
+//Student
+double MatrixGenerator::Student2d(double x, double y, double radius, double freedom)
+{
+	return pow(1.0+(((x-radius)*(x-radius)+(y-radius)*(y-radius))/freedom),-(freedom+2.0)/2.0)/(2.0 * M_PI);
+}
 
+//Generate Student
+void MatrixGenerator::GenerateStudent(int radius, double freedom)
+{
+	GenerateStudent(radius,freedom,"");
+}
+
+//Generate Student + Print Mode
+void MatrixGenerator::GenerateStudent(int radius, double freedom, string filename)
+{
+	int size = 2*radius+1;
+	vector<double> line = vector<double>();
+	for (double x = 0.0; x < size; x++)
+	{
+		for (double y = 0.0; y < size; y++)
+		{
+			double w = Student2d(x,y, radius, freedom);
+			line.push_back(w);
+		}
+		this->matrix.push_back(line);
+		line.clear();
+	}	
+	
+	if(filename.size()>0)
+	{
+		WriteMatrix(filename);
+	}
+}
+
+//Escribir matrix
 void MatrixGenerator::WriteMatrix(string filename)
 {   
 	ofstream file(filename);
