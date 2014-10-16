@@ -12,11 +12,11 @@ TARGET = main
 all:  $(TARGET)
 
 $(TARGET):  $(TARGET).cc
-	$(CC) $(CFLAGS) -o $(TARGET) *.cc $(CVFLAGS)
+	$(CC) $(CFLAGS) -o $(TARGET).o *.cc $(CVFLAGS)
 
 
 people: peopledetect.cpp
-	$(CC) $(CFLAGS) -o peopledetect peopledetect.cpp $(CVFLAGS)
+	$(CC) $(CFLAGS) -o peopledetect.o peopledetect.cpp $(CVFLAGS)
 
 clean:
 	$(RM) $(TARGET)

@@ -6,14 +6,15 @@ if [[ $# > 0 ]] ; then
 else
 	for i in *.c; do
 	    echo "compiling $i"
-	    gcc -ggdb `pkg-config --cflags opencv` -o `basename $i .c` $i `pkg-config --libs opencv`;
+	    gcc -ggdb `pkg-config --cflags opencv` -o `basename $i .c`.o $i `pkg-config --libs opencv`;
 	done
 	for i in *.cpp; do
 	    echo "compiling $i"
-	    g++ -std=c++11 -ggdb `pkg-config --cflags opencv` -o `basename $i .cpp` $i `pkg-config --libs opencv`;
+	    g++ -std=c++11 -ggdb `pkg-config --cflags opencv` -o `basename $i .cpp`.o $i `pkg-config --libs opencv`;
 	done 
 	for i in *.cc; do
 	    echo "compiling $i"
-	    g++ -std=c++11 -ggdb `pkg-config --cflags opencv` -o `basename $i .cc` $i `pkg-config --libs opencv`;
+	    g++ -std=c++11 -ggdb `pkg-config --cflags opencv` -o `basename $i .cc`.o $i `pkg-config --libs opencv`;
 	done 
+	rm -rf 0
 fi
