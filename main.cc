@@ -10,7 +10,7 @@ using namespace std;
 int main(int argc, char** argv)
 {
 
-	for (int i = 300; i < 350 ; i++)
+	for (int i = 300; i < 301 ; i++)
 	{
 		string filename("pruebas/student"+to_string(i)+".mat");
 		MatrixGenerator mg;
