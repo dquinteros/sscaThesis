@@ -32,7 +32,7 @@ public:
 	void WriteNeigbourhoodMatrix(string);
 	//Sobrecarga de operador asignacion
 	NeighbourhoodMatrix& operator= (const NeighbourhoodMatrix&);
-	//Calculo de la superficie residual
+/*	//Calculo de la superficie residual
 	double CoefU(void);
 	double CoefV(void);
 	double CoefW(void);
@@ -62,7 +62,7 @@ public:
 	double CalculateSkewnessX(void);
 	//Kurtosis por eje
 	double CalculateKurtosisY(void);
-	double CalculateKurtosisX(void);
+	double CalculateKurtosisX(void);*/
 };
 
 #endif

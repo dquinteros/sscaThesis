@@ -34,9 +34,9 @@ double MatrixGenerator::GaussianSigma(double radius)
 }
 
 //Gaussian
-double MatrixGenerator::Gaussian(double x, double radius, double sigma)
+double MatrixGenerator::Gaussian(double x, double sigma)
 {
-	return exp( -(((x-radius)/(sigma))*((x-radius)/(sigma)))/2.0);
+	return exp( -(x*x)/(sigma*sigma*2.0))/(sigma*sqrt(2.0*M_PI));
 
 }
 
@@ -63,14 +63,14 @@ void MatrixGenerator::GenerateGaussian(int radius, string filename)
 //Overload Matriz Gausiana + Sigma + Print Mode
 void MatrixGenerator::GenerateGaussian(int radius, double sigma, string filename)
 {
-	int size =  2 * radius + 1;	
+	int size =  2 * radius+1;	
 	double w_sum = 0.0;
 	vector<double> line = vector<double>();
 	for (double y = 0.0; y < size; y++)
 	{
 		for (double x = 0.0; x < size; x++)
 		{
-			double w = Gaussian(x,radius,sigma) * Gaussian(y,radius,sigma);			
+			double w = Gaussian(x-radius,sigma) * Gaussian(y-radius,sigma);			
 			w_sum += w;
 			line.push_back(w);			
 		}
@@ -81,7 +81,7 @@ void MatrixGenerator::GenerateGaussian(int radius, double sigma, string filename
 	{
 		for (double x = 0.0; x < size; x++)
 		{
-			this->matrix[x][y] /= w_sum;		
+			this->matrix[x][y] /= 1;//w_sum;		
 		}
 	}
 	if(filename.size()>0)
@@ -90,9 +90,9 @@ void MatrixGenerator::GenerateGaussian(int radius, double sigma, string filename
 	}	
 }
 //Student
-double MatrixGenerator::Student2d(double x, double y, double radius, double freedom)
+double MatrixGenerator::Student2d(double x, double y, double freedom)
 {
-	return pow(1.0+(((x-radius)*(x-radius)+(y-radius)*(y-radius))/freedom),-(freedom+2.0)/2.0)/(2.0 * M_PI);
+	return pow(1.0+((x*x+y*y)/freedom),-(freedom+2.0)/2.0)/(2.0 * M_PI);
 }
 
 //Generate Student
@@ -106,17 +106,55 @@ void MatrixGenerator::GenerateStudent(int radius, double freedom, string filenam
 {
 	int size = 2*radius+1;
 	vector<double> line = vector<double>();
-	for (double x = 0.0; x < size; x++)
+	for (double y = 0.0; y < size; y++)
 	{
-		for (double y = 0.0; y < size; y++)
+		for (double x = 0.0; x < size; x++)
 		{
-			double w = Student2d(x,y, radius, freedom);
+			double w = Student2d(x-radius, y-radius, freedom);
 			line.push_back(w);
 		}
 		this->matrix.push_back(line);
 		line.clear();
 	}	
 	
+	if(filename.size()>0)
+	{
+		WriteMatrix(filename);
+	}
+}
+
+//Generate 1D Exponential PDF
+double MatrixGenerator::Exponential(int x, double lambda)
+{
+	return lambda * exp(-abs(x) * lambda);
+}
+
+//Generate Exponential
+void MatrixGenerator::GenerateExponential(int radius, double lambda)
+{
+	GenerateExponential(radius, lambda,""); 
+}
+
+//Generate Exponential + Print Mode
+void MatrixGenerator::GenerateExponential(int radius, double lambda, string filename)
+{
+	int size = 2 * radius + 1;
+	vector<double> line  = vector<double>();
+	this->matrix.clear();
+	for (double y = 0.0; y < size; y++)
+	{
+		for (double x = 0.0; x < size; x++)
+		{
+			double w;
+			double x1 = x-radius;
+			double y1 = y-radius;
+			w = Exponential(y1, lambda) * Exponential(x1, lambda);
+			line.push_back(w);
+		}
+		this->matrix.push_back(line);
+		line.clear();
+	}
+
 	if(filename.size()>0)
 	{
 		WriteMatrix(filename);
@@ -133,7 +171,7 @@ void MatrixGenerator::WriteMatrix(string filename)
 		vector<vector<double>> matrix_(matrix);
 		for(vector<double> matrix_line : matrix_) {
 			for(double point : matrix_line) {
-				file << setprecision(10) << fixed << point << " ";
+				file << point << " ";
 			}
 			file << endl;
 		}

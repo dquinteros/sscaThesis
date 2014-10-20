@@ -3,16 +3,44 @@
 import sys
 import numpy as np
 
+
 filename = sys.argv[1]
 
 print filename
 
 Z = np.loadtxt(filename)
 
-def rms_deviation(Z):
-	import numpy as np
-	rms = 
+def  inverted_gaussian_filter(Z,A=1,sx=1,sy=1):
+    
+    h,w = np.shape(Z)
 
+    x = range(w)
+    y = range(h)
+
+    xo = w/2
+    yo = h/2
+
+    X,Y = np.meshgrid(x,y)
+
+    F = A*np.exp(-(X-xo)**2/(2.*sx**2)-(Y-yo)**2/(2.*sy**2))
+    
+    return np.sum((1-F)*Z)
+
+def  inverted_exponential_filter(Z,L=1):
+    
+    h,w = np.shape(Z)
+
+    x = range(w)
+    y = range(h)
+
+    xo = w/2
+    yo = h/2
+
+    X,Y = np.meshgrid(x,y)
+
+    F = L**2*np.exp(-abs(X-xo)*L)*np.exp(-abs(Y-yo)*L);
+    
+    return np.sum((1-F)*Z)
 
 #Here is the business:
 def image_statistics(Z):
@@ -121,8 +149,14 @@ def image_statistics_2D(Z):
     return cx,cy,sx,sy,skx,sky,kx,ky
 
 
+
 #Calculate the image statistics using the projection method
 stats_pr = image_statistics(Z)
+
+cx,cy,sx,sy,skx,sky,kx,ky = image_statistics(Z)
+
+inv_g = inverted_gaussian_filter(Z,A=1,sx=sx,sy=sy)
+inv_e = inverted_exponential_filter(Z)
 
 #Confirm that they are the same by using a 2D calculation
 stats_2d = image_statistics_2D(Z)
@@ -132,3 +166,6 @@ names = ('Centroid x','Centroid y','StdDev x','StdDev y','Skewness x','Skewness 
 print 'Statistis\t1D\t2D'
 for name,i1,i2 in zip(names, stats_2d,stats_pr):
     print '%s \t%.2f \t%.2f'%(name, i1,i2)
+
+print 'Sensibilidad Inv G:\t%.5f'%(inv_g)
+print 'Sensibilidad Ing E:\t%.5f'%(inv_e)

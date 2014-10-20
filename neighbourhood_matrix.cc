@@ -94,7 +94,7 @@ NeighbourhoodMatrix& NeighbourhoodMatrix::operator= (const NeighbourhoodMatrix &
 	return (*this); 
 }
 
-//Coefficients u, v, w
+/*//Coefficients u, v, w
 double NeighbourhoodMatrix::CoefU(void)
 {
 	double sum_coef = 0.0;
