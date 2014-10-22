@@ -26,7 +26,7 @@ public:
 	//Getters
 	HOGDescriptor get_hog(void){return this->hog;}
 	//Compute HOG escriptors
-	vector<float> ComputeHOG(string);
+	Mat ComputeHOG(string);
 	
 };
 

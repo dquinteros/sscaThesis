@@ -150,22 +150,25 @@ def image_statistics_2D(Z):
 
 
 
-#Calculate the image statistics using the projection method
-stats_pr = image_statistics(Z)
+if np.sum(Z)!=0:
+    #Calculate the image statistics using the projection method
+    stats_pr = image_statistics(Z)  
 
-cx,cy,sx,sy,skx,sky,kx,ky = image_statistics(Z)
+    cx,cy,sx,sy,skx,sky,kx,ky = image_statistics(Z) 
 
-inv_g = inverted_gaussian_filter(Z,A=1,sx=sx,sy=sy)
-inv_e = inverted_exponential_filter(Z)
+    inv_g = inverted_gaussian_filter(Z,A=1,sx=sx,sy=sy)
+    inv_e = inverted_exponential_filter(Z)  
 
-#Confirm that they are the same by using a 2D calculation
-stats_2d = image_statistics_2D(Z)
+    #Confirm that they are the same by using a 2D calculation
+    stats_2d = image_statistics_2D(Z)   
 
-names = ('Centroid x','Centroid y','StdDev x','StdDev y','Skewness x','Skewness y','Kurtosis x','Kurtosis y')
+    names = ('Centroid x','Centroid y','StdDev x','StdDev y','Skewness x','Skewness y','Kurtosis x','Kurtosis y')   
 
-print 'Statistis\t1D\t2D'
-for name,i1,i2 in zip(names, stats_2d,stats_pr):
-    print '%s \t%.2f \t%.2f'%(name, i1,i2)
+    print 'Statistis\t1D\t2D'
+    for name,i1,i2 in zip(names, stats_2d,stats_pr):
+        print '%s \t%.2f \t%.2f'%(name, i1,i2)  
 
-print 'Sensibilidad Inv G:\t%.5f'%(inv_g)
-print 'Sensibilidad Ing E:\t%.5f'%(inv_e)
+    print 'Sensibilidad Inv G:\t%.5f'%(inv_g)
+    print 'Sensibilidad Ing E:\t%.5f'%(inv_e)
+else:
+    print 'Todos los valores de la matriz son 0'
