@@ -60,6 +60,7 @@ sftp-config.json
 96X160H96/
 Test/
 Train/
+train/
 out/
 test_64x128_H96/
 train_64x128_H96/
