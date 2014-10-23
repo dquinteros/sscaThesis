@@ -3,36 +3,36 @@
 //Constructor vacio
 Classifiers::Classifiers(void)
 {
-	this->SVM = CvSVM();
-	this->params = CvSVMParams();
+	
 }
 
 //Construxtor General
-Classifiers::Classifiers(CvSVM SVM_, CvSVMParams params_)
+Classifiers::Classifiers(CvSVMParams params_)
 {
-	this->SVM = CvSVM(SVM_);
-	this->params = CvSVMParams(params_);
+	this->params = params_;
 }
 
 //Cosntructor copia
 Classifiers::Classifiers(const Classifiers& Classifiers_)
 {
-	this->SVM = CvSVM(Classifiers_.SVM);
-	this->params = CvSVMParams(Classifiers_.params);
+	this->params = Classifiers_.params;
 }
 
 //Entrenar y guardar modelo con parametros por defecto
-vector<float> Classifiers::HogVectorSVM(Mat decriptors, Mat labels, string filename)
+vector<float> Classifiers::HogVectorSVMTrain(Mat decriptors, Mat labels, string filename)
 {
-	return HogVectorSVM(Mat, Mat, SVM.get_params(), filename);
+	CvSVM SVM;
+	return HogVectorSVMTrain(decriptors, labels, SVM.get_params(), filename);
 }
 
 //Entrenar y guardar modelo
-vector<float> Classifiers::HogVectorSVM(Mat decriptors, Mat labels, CvSVMParams params_, string filename)
+vector<float> Classifiers::HogVectorSVMTrain(Mat decriptors, Mat labels, CvSVMParams params_, string filename)
 {
-	SVM.train(decriptors, labels, Mat(), Mat(), params:_);
+	CvSVM SVM;
 
-	SVM.save(filename);
+	SVM.train(decriptors, labels, Mat(), Mat(), params_);
+
+	SVM.save(filename.c_str());
 
 	const float* suport_vector = SVM.get_support_vector(0);
 
@@ -44,11 +44,13 @@ vector<float> Classifiers::HogVectorSVM(Mat decriptors, Mat labels, CvSVMParams 
 //Cargar Modelo SVM
 vector<float> Classifiers::HogVectorSVMLoad(string filename){
 	
-	SVM.load(filename);
+	CvSVM SVM;
+
+	SVM.load(filename.c_str());
 
 	const float* suport_vector = SVM.get_support_vector(0);
 
-	int suport_vector_size = end(suport_vector) - begin(suport_vector);
+	int suport_vector_size = sizeof(suport_vector_size)/sizeof(float);
 
 	vector<float>  peopleDetector {suport_vector,suport_vector+suport_vector_size};
 

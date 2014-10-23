@@ -7,9 +7,9 @@ Descriptors::Descriptors(void)
 	this->hog = HOGDescriptor();
 }
 
-Descriptors::Descriptors(HOGDescriptor hog)
+Descriptors::Descriptors(HOGDescriptor hog_)
 {
-	this->hog = HOGDescriptor(hog);
+	this->hog = HOGDescriptor(hog_);
 }
 
 Descriptors::Descriptors(const Descriptors& Descriptors_)
@@ -20,11 +20,9 @@ Descriptors::Descriptors(const Descriptors& Descriptors_)
 //Compute HOG Descriptors
 Mat Descriptors::ComputeHOG(string filename)
 {
-	ifstream file(filename);
-	Mat asd;
-
-	hog.winSize = Size(328,344);
-    hog.blockSize  = Size(8,8);
+	ifstream file(filename);	
+	hog.winSize = Size(64,128);
+    hog.blockSize  = Size(16,16);
     hog.blockStride = Size(8,8);
     hog.cellSize = Size(8,8);
 
@@ -34,7 +32,7 @@ Mat Descriptors::ComputeHOG(string filename)
 	}else{
 		string file_line;
 		Mat img;
-		vector<vector<float> > descriptor_vector = vector<vector<float>>();
+		vector<vector<float>> descriptor_vector = vector<vector<float>>();
 		vector<float> descriptor_result = vector<float>();
 		while(getline(file, file_line))
 		{
@@ -47,10 +45,12 @@ Mat Descriptors::ComputeHOG(string filename)
 				continue;
 			}
 
-			//328, 344
+			//332, 348
 			Mat resized_img;
 			descriptor_result.size();
-			resize(img,resized_img,cv::Size(328,344));			
+			//int x_multiple = img.rows/64;
+			//int y_multiple = img.cols/128;
+			resize(img,resized_img,cv::Size(64, 128));			
 			hog.compute(resized_img,descriptor_result);
 			descriptor_vector.push_back(descriptor_result);	
 		}
@@ -80,6 +80,7 @@ Mat Descriptors::ComputeHOG(string filename)
 		return hog_mat;
 	}
 
-	return asd;
+	Mat nullMat;
+	return nullMat;
 	
 }

@@ -75,20 +75,19 @@ int main(int argc, char** argv)
   HOGDescriptor hog;
 
   hog.winSize = Size(328,344);
-    hog.blockSize  = Size(8,8);
-    hog.blockStride = Size(8,8);
-    hog.cellSize = Size(8,8);
- 
+  hog.blockSize  = Size(8,8);
+  hog.blockStride = Size(8,8);
+  hog.cellSize = Size(8,8);
+  
   CvSVM SVM;
 
-  SVM.load("hog_svm_2.xml"); 
+  SVM.load("hog_svm_3.xml"); 
 
   const float* suport_vector = SVM.get_support_vector(0);
 
   vector<float> peopleDetector {suport_vector,suport_vector+15867};
 
   hog.setSVMDetector(peopleDetector);
-
 
   namedWindow("people detector", 1);
 
@@ -168,23 +167,23 @@ int main(int argc, char** argv)
         //std::cout << "(" << ant_info.at(4) << "," << ant_info.at(5) << ") = " << imagen[ant_info.at(4)][ant_info.at(5)] << std::endl;
    //   int verif = writescore(ant_info,filename, imagen, percent);
         //std::cout << "(" << ant_info.at(4) << "," << ant_info.at(5) << ") = " << imagen[ant_info.at(4)][ant_info.at(5)] << std::endl;
-      delete imagen;
-      if(argv[4][0]=='y'){
-        cout << "Imagen" << endl;
-       for( i = 0; i < found.size(); i++ )
-       {
-        Rect r = found[i];
-            //r.x += cvRound(r.width*0.1);
-            //r.width = cvRound(r.width*0.75);
-            //r.y += cvRound(r.height*0.075);
-            //r.height = cvRound(r.height*0.7);
-            //rectangle(img, r.tl(), r.br(), cv::Scalar(0,255,0), 1);
+        delete imagen;
+        if(argv[4][0]=='y'){
+          cout << "Imagen" << endl;
+          for( i = 0; i < found.size(); i++ )
+          {
+            Rect r = found[i];
+            r.x += cvRound(r.width*0.1);
+            r.width = cvRound(r.width*0.75);
+            r.y += cvRound(r.height*0.075);
+            r.height = cvRound(r.height*0.7);
+            rectangle(img, r.tl(), r.br(), cv::Scalar(0,255,0), 1);
             //Point ce = Point((r.tl().x+r.br().x)/2,(r.tl().y+r.br().y)/2);
             //line( img, ce,ce, Scalar(255, 0, 0), 2,8 );
             
-        } 
+          } 
           //for (i = 0; i < count; i++)
-         
+          
          // {
             //cout << ant_info.at(4+2*i) << "-" << ant_info.at(5+2*i);
             //Point ct = Point(ant_info.at(4+2*i),ant_info.at(5+2*i));

@@ -12,14 +12,17 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/ml/ml.hpp>
 
+using namespace std;
+using namespace cv;
+
+
 class Classifiers {
 private:
-	CvSVM SVM;
 	CvSVMParams params;
 public:
 	//Constructores
 	Classifiers(void);
-	Classifiers(CvSVM,CvSVMParams);
+	Classifiers(CvSVMParams);
 	Classifiers(const Classifiers&);
 	//Train & Save	
 	vector<float> HogVectorSVMTrain(Mat, Mat, string);
@@ -27,8 +30,6 @@ public:
 	//Load
 	vector<float> HogVectorSVMLoad(string);
 	//Detect 
-
-
 };
 
 

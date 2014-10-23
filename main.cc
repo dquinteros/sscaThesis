@@ -9,20 +9,22 @@
 #include "annotation.h"
 #include "classifiers.h"
 #include "descriptors.h"
+#include "detectors.h"
 #include "matrix_generator.h"
 #include "neighbourhood_matrix.h"
-
-
 
 using namespace std;
 using namespace cv;
 
 CvSVMParams get_default_svm_params();
+HOGDescriptor get_default_hog_decriptor();
 //int printversion();
 
 int main(int argc, char** argv)
 {
 
+
+	cout << "Computing Hog Descriptors..." << endl;
 	Descriptors dc;
 
 	string filename_pos(argv[1]);	
@@ -32,6 +34,8 @@ int main(int argc, char** argv)
 	string filename_neg(argv[2]);
 
 	Mat hog_result_neg(dc.ComputeHOG(filename_neg));
+
+	
 
 	int rows_pos = hog_result_pos.rows;
 	int rows_neg = hog_result_neg.rows; 
@@ -51,11 +55,28 @@ int main(int argc, char** argv)
 
 	vconcat(pos_label,neg_label,hog_labels);
 	
-	CvSVMParams params = get_default_params();	
+	cout << "Done." << endl;
+	cout << "Training Linear SVM..." << endl;
 
-	Classifiers classifier(CvSVM SVM, params);
+	CvSVMParams params = get_default_svm_params();	
 
-	
+	Classifiers classifier(params);
+
+	vector<float> peopleDetector = classifier.HogVectorSVMTrain(hog_decriptors,hog_labels,"hog_svm_3.xml");
+
+	cout << "Done." << endl;
+	cout << "Detecting People..." << endl;
+
+	HOGDescriptor hog = get_default_hog_decriptor();
+	hog.setSVMDetector(peopleDetector);
+
+	Detectors detectors(hog);
+
+	string imgs(argv[3]); 
+	string annotations(argv[4]);
+
+	detectors.HogDetectBucleShow(imgs, annotations);
+	cout << "Done." << endl;
 
 	return 0;
 	
@@ -63,10 +84,19 @@ int main(int argc, char** argv)
 
 CvSVMParams get_default_svm_params()
 {
-	CvSVMParams;
+	CvSVMParams params;
 	params.svm_type = CvSVM::C_SVC;    
 	params.kernel_type = CvSVM::LINEAR;    
 	params.term_crit = cvTermCriteria(CV_TERMCRIT_ITER, 1000, FLT_EPSILON);  
 	params.C = 0.01;
 	return params;
+}
+HOGDescriptor get_default_hog_decriptor()
+{
+	HOGDescriptor  hog;
+	hog.winSize = Size(64,128);
+	hog.blockSize  = Size(16,16);
+	hog.blockStride = Size(8,8);
+	hog.cellSize = Size(8,8);
+	return hog;
 }
