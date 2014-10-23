@@ -109,35 +109,36 @@ void Annotation::ReadAnnotation(string filename) {
 				split(down_right,aux_split.back(),is_any_of(","),token_compress_on);
 				Point up_left_coordinates = Point(stoi(up_left.front()),stoi(up_left.back()));
 				Point down_right_coordinates = Point(stoi(down_right.front()),stoi(down_right.back()));
-				object_up_left.push_back (up_left_coordinates);
-				object_down_right.push_back(down_right_coordinates);
+				this->object_up_left.push_back(up_left_coordinates);
+				this->object_down_right.push_back(down_right_coordinates);
 				int center_x = (up_left_coordinates.x+down_right_coordinates.x)/2;
 				int center_y = (up_left_coordinates.y+down_right_coordinates.y)/2;
 				Point center_coordinates = Point(center_x,center_y);
+				this->object_center.push_back(center_coordinates);
 				aux_split.clear();
 			}
 			else if ('C'==splitted_line.front()[0])
 			{			
 				split(aux_split,splitted_line.back(),is_any_of(","),token_compress_on);
 				Point head_center = Point(stoi(aux_split.front()),stoi(aux_split.back()));
-				object_head_center.push_back(head_center);
+				this->object_head_center.push_back(head_center);
 			}
 			else if ("Objectswithgroundtruth"==splitted_line.front())
 			{			
 				split(aux_split,splitted_line.back(),is_any_of("{"),token_compress_on);
-				object_number = stoi(aux_split.front());
+				this->object_number = stoi(aux_split.front());
 				aux_split.clear();
 			}
 			else if ("ImagesizeXxYxC"==splitted_line.front())
 			{			
 				split(aux_split,splitted_line.back(),is_any_of("x"),token_compress_on);
-				image_width = stoi(aux_split.at(0));
-				image_height = stoi(aux_split.at(1));
+				this->image_width = stoi(aux_split.at(0));
+				this->image_height = stoi(aux_split.at(1));
 				aux_split.clear();
 			}
 			else if ("Imagefilename"==splitted_line.front())
 			{
-				image_filename = splitted_line.back();
+				this->image_filename = splitted_line.back();
 			}
 			splitted_line.clear();
 		}		

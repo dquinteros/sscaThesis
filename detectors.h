@@ -12,6 +12,8 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/ml/ml.hpp>
 
+#include <boost/lexical_cast.hpp>
+
 #include "annotation.h"
 #include "neighbourhood_matrix.h"
 
@@ -27,9 +29,9 @@ public:
 	Mat HogDetectShow(string, string);
 	Mat HogDetectShow(string, string, HOGDescriptor);
 	Mat HogDetectShow(string, string, vector<float>);
-	NeighbourhoodMatrix HogDetectPrint(string, string);
-	NeighbourhoodMatrix HogDetectPrint(string, string, HOGDescriptor);
-	NeighbourhoodMatrix HogDetectPrint(string, string, vector<float>);
+	vector<NeighbourhoodMatrix> HogDetectPrint(string, string);
+	vector<NeighbourhoodMatrix> HogDetectPrint(string, string, HOGDescriptor);
+	vector<NeighbourhoodMatrix> HogDetectPrint(string, string, vector<float>);
 	void HogDetectBucleShow(string, string);
 	void HogDetectBuclePrint(string, string);
 

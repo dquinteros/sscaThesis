@@ -28,14 +28,10 @@ int main(int argc, char** argv)
 	Descriptors dc;
 
 	string filename_pos(argv[1]);	
-
 	Mat hog_result_pos(dc.ComputeHOG(filename_pos));
 
 	string filename_neg(argv[2]);
-
 	Mat hog_result_neg(dc.ComputeHOG(filename_neg));
-
-	
 
 	int rows_pos = hog_result_pos.rows;
 	int rows_neg = hog_result_neg.rows; 
@@ -64,18 +60,19 @@ int main(int argc, char** argv)
 
 	vector<float> peopleDetector = classifier.HogVectorSVMTrain(hog_decriptors,hog_labels,"hog_svm_3.xml");
 
-	cout << "Done." << endl;
+	cout << "Done." << endl;	
 	cout << "Detecting People..." << endl;
 
 	HOGDescriptor hog = get_default_hog_decriptor();
-	hog.setSVMDetector(peopleDetector);
+
+	hog.setSVMDetector();
 
 	Detectors detectors(hog);
 
 	string imgs(argv[3]); 
 	string annotations(argv[4]);
 
-	detectors.HogDetectBucleShow(imgs, annotations);
+	detectors.HogDetectBuclePrint(imgs, annotations);
 	cout << "Done." << endl;
 
 	return 0;

@@ -91,7 +91,6 @@ int main(int argc, char** argv)
 
   namedWindow("people detector", 1);
 
-
   for(;;)
   {   
     char* filename = _filename;

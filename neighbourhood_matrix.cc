@@ -5,7 +5,7 @@ NeighbourhoodMatrix::NeighbourhoodMatrix(void)
 {
 	this->height = 0;
 	this->width = 0;		
-	this->neighbourhood_matrix = vector<vector<double>>(height, vector<double>(width));
+	this->neighbourhood_matrix = vector<vector<double>>(height, vector<double>(width, 0.0));
 }
 
 //Constructor solo con el vector
@@ -13,7 +13,7 @@ NeighbourhoodMatrix::NeighbourhoodMatrix(vector<vector<double>> neighbourhood_ma
 {
 	this->height = neighbourhood_matrix_.size();
 	this->width = neighbourhood_matrix_.front().size();
-	this->neighbourhood_matrix = vector<vector<double>>(neighbourhood_matrix_);
+	this->neighbourhood_matrix = neighbourhood_matrix_;
 }
 
 //Constructor con vector y tamaño
@@ -21,14 +21,14 @@ NeighbourhoodMatrix::NeighbourhoodMatrix(vector<vector<double>> neighbourhood_ma
 {
 	this->height = height_;
 	this->width = width_;
-	this->neighbourhood_matrix = vector<vector<double>>(neighbourhood_matrix_);
+	this->neighbourhood_matrix = neighbourhood_matrix_;
 }
 //Constructor copia
 NeighbourhoodMatrix::NeighbourhoodMatrix(const NeighbourhoodMatrix& neighbourhood_matrix_)
 {
 	this->height = neighbourhood_matrix_.height;
 	this->width = neighbourhood_matrix_.width;
-	this->neighbourhood_matrix = vector<vector<double>>(neighbourhood_matrix_.neighbourhood_matrix);
+	this->neighbourhood_matrix = neighbourhood_matrix_.neighbourhood_matrix;
 }
 //Lectura
 void NeighbourhoodMatrix::ReadNeighbourhoodMatrix(string filename) {
@@ -66,23 +66,27 @@ void NeighbourhoodMatrix::ReadNeighbourhoodMatrix(string filename) {
 void NeighbourhoodMatrix::WriteNeigbourhoodMatrix(string filename)
 {   
 	ofstream file(filename);
-	if(height >= 0 && width >= 0 && file)
-	{
-		
-		vector<vector<double>> neighbourhood_matrix_(neighbourhood_matrix);
-		for(vector<double> matrix_line : neighbourhood_matrix_) 
+	if(!file)	{
+		fprintf( stderr, "ERROR: the specified file could not be loaded\n");
+	}else{
+		if(this->height >= 0 && this->width >= 0)
 		{
-			for(double point_probability : matrix_line) 
+			file << "# name: MAT\n# type: matrix\n# rows: " << height << "\n# columns: " << width << "\n";
+			vector<vector<double>> neighbourhood_matrix_(this->neighbourhood_matrix);
+			for(vector<double> matrix_line : neighbourhood_matrix_) 
 			{
-				file << point_probability << " ";
+				for(double point_probability : matrix_line) 
+				{
+					file << " " << point_probability ;
+				}
+				file << endl;
 			}
-			file << endl;
+			file.close();
 		}
-		file.close();
-	}
-	else
-	{
-		fprintf( stderr, "ERROR: the specified file could not be loaded or neighbourhood matrix is empty\n");
+		else
+		{
+			fprintf( stderr, "ERROR: Empty matrix\n");
+		}
 	}
 }
 
