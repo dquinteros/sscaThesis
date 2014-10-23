@@ -65,7 +65,7 @@ int main(int argc, char** argv)
 
 	HOGDescriptor hog = get_default_hog_decriptor();
 
-	hog.setSVMDetector();
+	hog.setSVMDetector(peopleDetector);
 
 	Detectors detectors(hog);
 
