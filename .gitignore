@@ -67,3 +67,4 @@ train_64x128_H96/
 pruebas/
 octave*
 *.xml
+*.png
