@@ -17,7 +17,6 @@
 using namespace std;
 using namespace cv;
 
-
 class Classifiers {
 private:
 	CvSVMParams params;
@@ -31,7 +30,6 @@ public:
 	vector<float> HogVectorSVMTrain(Mat, Mat, CvSVMParams, string);
 	//Load
 	vector<float> HogVectorSVMLoad(string);
-	//Detect 
 };
 
 

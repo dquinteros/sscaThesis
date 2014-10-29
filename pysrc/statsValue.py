@@ -10,6 +10,7 @@ print filename
 
 Z = np.loadtxt(filename)
 
+
 def  inverted_gaussian_filter(Z,A=1,sx=1,sy=1):
     
     h,w = np.shape(Z)
@@ -22,9 +23,11 @@ def  inverted_gaussian_filter(Z,A=1,sx=1,sy=1):
 
     X,Y = np.meshgrid(x,y)
 
+    C = ((X-xo)**2+(Y-yo)**2)**(.5)
+
     F = A*np.exp(-(X-xo)**2/(2.*sx**2)-(Y-yo)**2/(2.*sy**2))
     
-    return np.sum((1-F)*Z)
+    return np.sum(np.multiply((F-Z),C))
 
 def  inverted_exponential_filter(Z,L=1):
     
@@ -148,15 +151,13 @@ def image_statistics_2D(Z):
 
     return cx,cy,sx,sy,skx,sky,kx,ky
 
-
-
 if np.sum(Z)!=0:
     #Calculate the image statistics using the projection method
     stats_pr = image_statistics(Z)  
 
     cx,cy,sx,sy,skx,sky,kx,ky = image_statistics(Z) 
 
-    inv_g = inverted_gaussian_filter(Z,A=1,sx=sx,sy=sy)
+    inv_g = inverted_gaussian_filter(Z,A=1,sx=1,sy=1)
     inv_e = inverted_exponential_filter(Z)  
 
     #Confirm that they are the same by using a 2D calculation

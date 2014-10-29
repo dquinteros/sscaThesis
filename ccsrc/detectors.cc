@@ -30,7 +30,7 @@ Mat Detectors::HogDetectShow(string img_filename, string annotation_filename)
 	vector<double> peso;
 
 	double t = (double)getTickCount();
-	hog.detectMultiScale(img, found, peso, 0, Size(1,1), Size(32,32), 1.05, 0);
+	hog.detectMultiScale(img, found, peso, 0, Size(1,1), Size(0,0), 1.05, 0);
 	t = (double)getTickCount() - t;
 
 	cout << "tdetection time = "<< t*1000./cv::getTickFrequency() << "ms" << endl;
@@ -45,7 +45,7 @@ Mat Detectors::HogDetectShow(string img_filename, string annotation_filename)
         //r.width = cvRound(r.width*0.75);
         //r.y += cvRound(r.height*0.075);
         //r.height = cvRound(r.height*0.7);
-		rectangle(img, r.tl(), r.br(), cv::Scalar(0,255,0), 1);
+		//rectangle(img, r.tl(), r.br(), cv::Scalar(0,255,0), 1);
 		i++;
 	} 
 	
@@ -82,7 +82,7 @@ vector<NeighbourhoodMatrix> Detectors::HogDetectPrint(string img_filename, strin
 	vector<double> peso;
 
 	double t = (double)getTickCount();
-	hog.detectMultiScale(img, found, peso, 0, Size(1,1), Size(32,32), 1.05, 0);
+	hog.detectMultiScale(img, found, peso, 0, Size(1,1), Size(0,0), 1.05, 0);
 	t = (double)getTickCount() - t;
 
 	cout << "tdetection time = "<< t*1000./cv::getTickFrequency() << "ms" << endl;

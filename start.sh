@@ -1,5 +1,5 @@
 #!/bin/sh
-make clean && make && ./main.o pos.lst neg.lst pos_t.lst annotations.lst
+#make clean && make && ./main.o list_files/pos.lst list_files/neg.lst list_files/pos_test_original.lst list_files/annotations_test_original.lst
 for i in pruebas/*.mat; do
-	    python statsValue.py $i
+	    python pysrc/statsValue.py $i
 done
