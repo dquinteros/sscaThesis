@@ -4,7 +4,7 @@
 //Constructores
 Descriptors::Descriptors(void)
 {
-	this->hog = HOGDescriptor();
+	this->hog = DefaultHOGDescriptor();
 }
 
 Descriptors::Descriptors(HOGDescriptor hog_)
@@ -14,18 +14,28 @@ Descriptors::Descriptors(HOGDescriptor hog_)
 
 Descriptors::Descriptors(const Descriptors& Descriptors_)
 {
-	this->hog = Descriptors_.hog;
+	this->hog = HOGDescriptor(Descriptors_.hog);
+}
+
+//HOG Tamaño por defecto
+HOGDescriptor Descriptors::DefaultHOGDescriptor()
+{
+	HOGDescriptor  hog;
+	hog.winSize = Size(64,128);
+	hog.blockSize  = Size(16,16);
+	hog.blockStride = Size(8,8);
+	hog.cellSize = Size(8,8);
+	return hog;
 }
 
 //Compute HOG Descriptors
 Mat Descriptors::ComputeHOG(string pos_filename, string neg_filename )
 {
 	ifstream file_pos(pos_filename);
-	ifstream file_neg(neg_filename);	
-	hog.winSize = Size(64,128);
-	hog.blockSize  = Size(16,16);
-	hog.blockStride = Size(8,8);
-	hog.cellSize = Size(8,8);
+	ifstream file_neg(neg_filename);
+
+	int hog_width = hog.winSize.width;
+	int hog_height = hog.winSize.height;
 
 	if(!file_pos || !file_neg)
 	{		
@@ -43,7 +53,7 @@ Mat Descriptors::ComputeHOG(string pos_filename, string neg_filename )
 
 			if(!img.data)
 				continue;
-			Rect roi(16,16,64,128);
+			Rect roi(16,16,hog_width,hog_height);
 			Mat resized_img = img(roi);
 			//resize(img,resized_img,cv::Size(64, 128));
 			hog.compute(resized_img,descriptor_result);
@@ -61,15 +71,14 @@ Mat Descriptors::ComputeHOG(string pos_filename, string neg_filename )
 				continue;
 
 			for(int i = 0; i < 10; i++) {
-				int x = rand() % (img.cols-65) + 1; 
-				int y = rand() % (img.rows-128) + 1; 
-				Rect roi(x, y, 64, 128);
+				int x = rand() % (img.cols-3-hog_width) + 3; 
+				int y = rand() % (img.rows-3-hog_height) + 3; 
+				Rect roi(x, y, hog_width, hog_height);
 				Mat resized_img  = img(roi);
 				//resize(img,resized_img,cv::Size(64, 128));
 				hog.compute(resized_img,descriptor_result);
 				descriptor_vector.push_back(descriptor_result);	
-			}
-			
+			}			
 		}
 
 		int rows = descriptor_vector.size();
@@ -77,8 +86,8 @@ Mat Descriptors::ComputeHOG(string pos_filename, string neg_filename )
 
 		int rows_neg = rows - rows_pos;
 
-		vector<float> hog_label(rows_pos,1); 
-		vector<float> hog_label_neg(rows_neg,-1); 
+		vector<float> hog_label(rows_pos,1.0); 
+		vector<float> hog_label_neg(rows_neg,-1.0); 
 		hog_label.insert(hog_label.end(),hog_label_neg.begin(), hog_label_neg.end());
 
 		Mat hog_mat = Mat(rows, cols, CV_32FC1);
@@ -93,7 +102,8 @@ Mat Descriptors::ComputeHOG(string pos_filename, string neg_filename )
 			}
 		}
 
-		this->labels = Mat(hog_label_mat);		
+		this->hog_labels = Mat(hog_label_mat);
+		this->hog_descriptors = Mat(hog_mat);		
 		return hog_mat;
 	}
 

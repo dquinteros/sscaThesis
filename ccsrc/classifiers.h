@@ -19,17 +19,22 @@ using namespace cv;
 
 class Classifiers {
 private:
-	CvSVMParams params;
+	CvSVMParams svm_params;
 public:
 	//Constructores
 	Classifiers(void);
 	Classifiers(CvSVMParams);
 	Classifiers(const Classifiers&);
+	//SVM default Params
+	CvSVMParams LinearSVMDefaultParams(void);
 	//Train & Save	
-	vector<float> HogVectorSVMTrain(Mat, Mat, string);
-	vector<float> HogVectorSVMTrain(Mat, Mat, CvSVMParams, string);
-	//Load
-	vector<float> HogVectorSVMLoad(string);
+	void SVMTrain(Mat, Mat, string);
+	void SVMTrain(Mat, Mat, CvSVMParams, string);
+	//Adaboost default
+	CvSVMParams AdaboostDefaultParams(void);
+	//Train & Save	
+	void AdaboostTrain(Mat, Mat, string);
+	void AdaboostTrain(Mat, Mat, CvSVMParams, string);
 };
 
 

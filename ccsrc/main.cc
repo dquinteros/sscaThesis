@@ -23,62 +23,33 @@ HOGDescriptor get_default_hog_decriptor();
 int main(int argc, char** argv)
 {
 	
-	cout << "Computing Hog Descriptors..." << endl;
-	Descriptors dc;
+	cout << "Computing Descriptors..." << endl;
 
+	Descriptors dc;
 	string filename_pos(argv[1]);	
 	string filename_neg(argv[2]);
-
 	Mat hog_decriptors(dc.ComputeHOG(filename_pos,filename_neg));
 	Mat hog_labels(dc.get_labels());
-
-	cout << hog_decriptors.at<float>(0,0) << endl;
 	
 	cout << "Done." << endl;
-	cout << "Training Linear SVM..." << endl;
 
-	CvSVMParams params = get_default_svm_params();	
+	cout << "Training & Saving Classifiers..." << endl;	
 
 	Classifiers classifier;
+	classifier.AdaboostTrain(hog_decriptors,hog_labels,"hog_adaboost.xml");
 
-	vector<float> peopleDetector = classifier.HogVectorSVMTrain(hog_decriptors,hog_labels, params,"hog_svm_3.xml");
-
-	//vector<float> peopleDetector = classifier.HogVectorSVMLoad("hog_svm_2.xml");
-
-	cout << "Done." << endl;	
+	cout << "Done." << endl;
+	
 	cout << "Detecting People..." << endl;
 
-	HOGDescriptor hog = get_default_hog_decriptor();
+	Descriptors cd;	
+	Detectors detectors(cd.DefaultHOGDescriptor());
+	detectors.LoadAdaboost("hog_adaboost.xml");
+	string imgs(argv[3]);	
+	detectors.HOGSVMDetectBuclePrint(imgs);
 
-	hog.setSVMDetector(peopleDetector);
-
-	Detectors detectors(hog);
-
-	string imgs(argv[3]); 
-	string annotations(argv[4]);
-
-	detectors.HogDetectBucleShow(imgs, annotations);
 	cout << "Done." << endl;
 
 	return 0;
 	
-}
-
-CvSVMParams get_default_svm_params()
-{
-	CvSVMParams params;
-	params.svm_type = CvSVM::C_SVC;    
-	params.kernel_type = CvSVM::LINEAR;    
-	params.term_crit = cvTermCriteria(CV_TERMCRIT_ITER+CV_TERMCRIT_EPS, 10000000, FLT_EPSILON);  
-	params.C = 0.01;
-	return params;
-}
-HOGDescriptor get_default_hog_decriptor()
-{
-	HOGDescriptor  hog;
-	hog.winSize = Size(64,128);
-	hog.blockSize  = Size(16,16);
-	hog.blockStride = Size(8,8);
-	hog.cellSize = Size(8,8);
-	return hog;
 }

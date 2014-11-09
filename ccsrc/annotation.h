@@ -31,11 +31,12 @@ private:
 	vector<Point> object_up_left;
 	vector<Point> object_down_right;
 	vector<Point> object_center;
+	vector<Rect> object;
 
 public:
 	//Constructor
 	Annotation(void);
-	Annotation(string,int,int,int,vector<Point>,vector<Point>,vector<Point>,vector<Point>);
+	Annotation(string,int,int,int,vector<Point>,vector<Point>,vector<Point>,vector<Point>,vector<Rect>);
 	Annotation(const Annotation&);
 	//Setters
 	void set_image_filename(string);
@@ -46,6 +47,7 @@ public:
 	void set_object_up_left(vector<Point>);
 	void set_object_down_right(vector<Point>);
 	void set_object_center(vector<Point>);
+	void set_object(vector<Rect>);
 	//Getters
 	string get_image_filename(void){return this->image_filename;}
 	int get_image_width(void){return this->image_width;}
@@ -55,6 +57,7 @@ public:
 	vector<Point> get_object_up_left(void){return this->object_up_left;}
 	vector<Point> get_object_down_right(void){return this->object_down_right;}
 	vector<Point> get_object_center(void){return this->object_center;}	
+	vector<Rect> get_object(void){return this->object;}
 	//Lectura
 	void ReadAnnotation(string);
 	//Sobrecarga de operador asignacion

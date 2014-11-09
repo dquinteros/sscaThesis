@@ -27,7 +27,7 @@ def  inverted_gaussian_filter(Z,A=1,sx=1,sy=1):
 
     F = A*np.exp(-(X-xo)**2/(2.*sx**2)-(Y-yo)**2/(2.*sy**2))
     
-    return np.sum(np.multiply((F-Z),C))
+    return np.sum(np.multiply((Z-F),C))
 
 def  inverted_exponential_filter(Z,L=1):
     
@@ -157,7 +157,7 @@ if np.sum(Z)!=0:
 
     cx,cy,sx,sy,skx,sky,kx,ky = image_statistics(Z) 
 
-    inv_g = inverted_gaussian_filter(Z,A=1,sx=1,sy=1)
+    inv_g = inverted_gaussian_filter(Z,A=1,sx=.1,sy=.1)
     inv_e = inverted_exponential_filter(Z)  
 
     #Confirm that they are the same by using a 2D calculation

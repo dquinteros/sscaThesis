@@ -11,9 +11,10 @@ Annotation::Annotation(void)
 	this->object_up_left = vector<Point>();
 	this->object_down_right = vector<Point>();
 	this->object_center = vector<Point>();
+	this->object = vector<Rect>();
 }
 //Constructor general
-Annotation::Annotation(string image_filename_,int image_width_,int image_height_,int object_number_,vector<Point> object_head_center_,vector<Point> object_up_left_,vector<Point> object_down_right_,vector<Point> object_center_)
+Annotation::Annotation(string image_filename_,int image_width_,int image_height_,int object_number_,vector<Point> object_head_center_,vector<Point> object_up_left_,vector<Point> object_down_right_,vector<Point> object_center_, vector<Rect> object_)
 {
 	this->image_filename = image_filename_;
 	this->image_width = image_width_;
@@ -23,6 +24,7 @@ Annotation::Annotation(string image_filename_,int image_width_,int image_height_
 	this->object_up_left = vector<Point>(object_up_left_);
 	this->object_down_right = vector<Point>(object_down_right_);
 	this->object_center = vector<Point>(object_center_);
+	this->object = vector<Rect>(object_);
 }
 //Constructor copia
 Annotation::Annotation(const Annotation& annotation_)
@@ -35,6 +37,7 @@ Annotation::Annotation(const Annotation& annotation_)
 	this->object_up_left = vector<Point>(annotation_.object_up_left);
 	this->object_down_right = vector<Point>(annotation_.object_down_right);
 	this->object_center = vector<Point>(annotation_.object_center);
+	this->object = vector<Rect>(annotation_.object);
 }
 //Set image_filename
 void Annotation::set_image_filename(string image_filename_)
@@ -76,6 +79,11 @@ void Annotation::set_object_center(vector<Point> object_center_)
 {
 	this->object_center = object_center_;
 }
+//Set object
+void Annotation::set_object(vector<Rect> object_)
+{
+	this->object = object_;
+}
 //Letura
 void Annotation::ReadAnnotation(string filename) {
 	
@@ -115,6 +123,10 @@ void Annotation::ReadAnnotation(string filename) {
 				int center_y = (up_left_coordinates.y+down_right_coordinates.y)/2;
 				Point center_coordinates = Point(center_x,center_y);
 				this->object_center.push_back(center_coordinates);
+				int width = stoi(down_right.front()) - stoi(up_left.front());
+				int height = stoi(down_right.back()) - stoi(up_left.back());
+				Rect roi(stoi(up_left.front()),stoi(up_left.back()),width,height);
+				this->object.push_back(roi);
 				aux_split.clear();
 			}
 			else if ('C'==splitted_line.front()[0])

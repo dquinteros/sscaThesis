@@ -17,8 +17,14 @@ $(TARGET):  ccsrc/$(TARGET).cc
 hogtest:  tools/hogTest.cc
 	$(CC) $(CFLAGS) -o hogTest.o tools/hogTest.cc $(CVFLAGS)
 
+resize:  tools/image_resizer.cc
+	$(CC) $(CFLAGS) -o image_resizer.o tools/image_resizer.cc ccsrc/annotation.cc $(CVFLAGS)
+
+mean:  tools/meanSizeObject.cc
+	$(CC) $(CFLAGS) -o meanSizeObject.o tools/meanSizeObject.cc ccsrc/annotation.cc $(CVFLAGS)	
+
 people: peopledetect.cpp
-	$(CC) $(CFLAGS) -o peopledetect.o peopledetect.cpp $(CVFLAGS)
+	$(CC) $(CFLAGS) -o peopledetect.o peopledetect.cpp $(CVFLAGS) 
 
 clean:
 	$(RM) *.o

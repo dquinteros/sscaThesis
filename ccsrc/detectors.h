@@ -17,23 +17,40 @@
 #include "annotation.h"
 #include "neighbourhood_matrix.h"
 
-class Detectors {
+using namespace cv;
+
+class Detectors{
 private:
+	CvSVM SVM;
+	CvBoost boost;
 	HOGDescriptor hog;
 public:
 	//Constructor
 	Detectors(void);
-	Detectors(HOGDescriptor);
+	Detectors(HOGDescriptor, string);
 	Detectors(const Detectors&);
-	//Deteccion con hog
-	Mat HogDetectShow(string, string);
-	Mat HogDetectShow(string, string, HOGDescriptor);
-	Mat HogDetectShow(string, string, vector<float>);
-	vector<NeighbourhoodMatrix> HogDetectPrint(string, string);
-	vector<NeighbourhoodMatrix> HogDetectPrint(string, string, HOGDescriptor);
-	vector<NeighbourhoodMatrix> HogDetectPrint(string, string, vector<float>);
-	void HogDetectBucleShow(string, string);
-	void HogDetectBuclePrint(string, string);
+	//Loaders
+	void LoadSVM(string);
+	void LoadAdaboost(string);
+	//Deteccion con HOG+SVM unitaria
+	Mat HOGSVMDetectShow(string);
+	Mat HOGSVMDetectShow(string, string);
+	NeighbourhoodMatrix HOGSVMDetectPrint(string);
+	NeighbourhoodMatrix HOGSVMDetectPrint(string, string);
+	//Deteccion con HOG+SVM bucle
+	void HOGSVMDetectBucleShow(string);
+	void HOGSVMDetectBuclePrint(string);
+	//Deteccion con HOG+Adaboost unitaria
+	Mat HOGAdaboostDetectShow(string);
+	Mat HOGAdaboostDetectShow(string, string);
+	NeighbourhoodMatrix HOGAdaboostDetectPrint(string);
+	NeighbourhoodMatrix HOGAdaboostDetectPrint(string, string);
+	//Deteccion con HOG+Adaboost bucle
+	void HOGAdaboostDetectBucleShow(string);
+	void HOGAdaboostDetectBuclePrint(string);
+
+
+
 
 };
 

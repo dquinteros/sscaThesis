@@ -18,8 +18,8 @@ class Descriptors
 {
 private:
 	HOGDescriptor hog;
-	Mat decriptors;
-	Mat labels;
+	Mat hog_descriptors;
+	Mat hog_labels;
 public:
 	//Constructores
 	Descriptors(void);
@@ -27,8 +27,10 @@ public:
 	Descriptors(const Descriptors&);
 	//Getters
 	HOGDescriptor get_hog(void){return this->hog;}
-	Mat get_decriptors(void){return this->decriptors;}
-	Mat get_labels(void){return this->labels;}
+	Mat get_descriptors(void){return this->hog_descriptors;}
+	Mat get_labels(void){return this->hog_labels;}
+	//Hog Default Size
+	HOGDescriptor DefaultHOGDescriptor(void);
 	//Compute HOG escriptors
 	Mat ComputeHOG(string,string);
 	
