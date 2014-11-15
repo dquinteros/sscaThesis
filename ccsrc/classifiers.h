@@ -31,10 +31,10 @@ public:
 	void SVMTrain(Mat, Mat, string);
 	void SVMTrain(Mat, Mat, CvSVMParams, string);
 	//Adaboost default
-	CvSVMParams AdaboostDefaultParams(void);
+	CvBoostParams AdaboostDefaultParams(void);
 	//Train & Save	
 	void AdaboostTrain(Mat, Mat, string);
-	void AdaboostTrain(Mat, Mat, CvSVMParams, string);
+	void AdaboostTrain(Mat, Mat, CvBoostParams, string);
 };
 
 

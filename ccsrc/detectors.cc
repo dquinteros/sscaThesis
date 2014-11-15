@@ -19,13 +19,13 @@ Detectors::Detectors(const Detectors& Detectors_)
 }
 
 //Load SVM
-void LoadSVM(string svm_model)
+void Detectors::LoadSVM(string svm_model)
 {
 	this->SVM.load(svm_model.c_str());
 }
 
 //Load Adaboost
-void LoadAdaboost(string boost_model)
+void Detectors::LoadAdaboost(string boost_model)
 {
 	this->boost.load(boost_model.c_str());
 }
@@ -120,7 +120,7 @@ void Detectors::HOGSVMDetectBucleShow(string img_filename_list)
 			break;
 	}
 }
-void Detectors::HOGSVMDetectBuclePrint(string img_filename_list)
+void Detectors::HOGSVMDetectBuclePrint(string img_filename_list, string folder)
 {
 	ifstream img_filename(img_filename_list);
 	string img_filename_line;
@@ -129,7 +129,7 @@ void Detectors::HOGSVMDetectBuclePrint(string img_filename_list)
 		NeighbourhoodMatrix neighbourhood_matrix(HOGSVMDetectPrint(img_filename_line));
 		img_filename_line.erase(img_filename_line.find_last_of("."), string::npos);
 		img_filename_line.erase(0,img_filename_line.find_last_of("/")+1);
-		string file = boost::lexical_cast<string>("out/")+img_filename_line+boost::lexical_cast<string>(".mat");
+		string file = folder+img_filename_line+boost::lexical_cast<string>(".mat");
 		neighbourhood_matrix.WriteNeigbourhoodMatrix(file);
 		cout << file << endl;
 	}
@@ -156,8 +156,8 @@ Mat Detectors::HOGAdaboostDetectShow(string filename)
 				crop_hog.at<float>(0,i) = descriptor_result[i];
 			}
 
-			float result = boost.predict(crop_hog,0,0,CV_WHOLE_SEQ,false,true);			
-			
+			float result = boost.predict(crop_hog,Mat(),Range::all(),false,false);
+
 			Point ce = Point((roi.tl().x+roi.br().x)/2,(roi.tl().y+roi.br().y)/2);
 			line( img, ce,ce, Scalar(0, 0, 255*result),1,8);
 			//rectangle(img, roi.tl(), roi.br(), cv::Scalar(0,255*result,0), 1);
@@ -172,7 +172,7 @@ Mat Detectors::HOGAdaboostDetectShow(string filename, string boost_model)
 	return HOGAdaboostDetectShow(filename);
 }
 //
-NeighbourhoodMatrix Detectors::HOGSVMDetectPrint(string filename)
+NeighbourhoodMatrix Detectors::HOGAdaboostDetectPrint(string filename)
 {
 	Mat img;
 	img = imread(filename);
@@ -195,7 +195,7 @@ NeighbourhoodMatrix Detectors::HOGSVMDetectPrint(string filename)
 			{
 				crop_hog.at<float>(0,i) = descriptor_result[i];
 			}
-			float result = boost.predict(crop_hog,0,0,CV_WHOLE_SEQ,false,true);
+			float result = boost.predict(crop_hog,Mat(),Range::all(),false,false);
 			matrix[y-3][x-3] = (double)result;			
 		}
 	}
@@ -204,8 +204,8 @@ NeighbourhoodMatrix Detectors::HOGSVMDetectPrint(string filename)
 }
 NeighbourhoodMatrix Detectors::HOGAdaboostDetectPrint(string filename, string boost_model)
 {
-	this->boot.load(boost_model.c_str());
-	return HOGSVMDetectPrint(filename);
+	this->boost.load(boost_model.c_str());
+	return HOGAdaboostDetectPrint(filename);
 }
 //Deteccion con SVM bucle
 void Detectors::HOGAdaboostDetectBucleShow(string img_filename_list)
@@ -216,7 +216,7 @@ void Detectors::HOGAdaboostDetectBucleShow(string img_filename_list)
 	namedWindow("People Detector", 1);
 	while(getline(img_filename, img_filename_line)) {
 
-		img = HOGSVMDetectShow(img_filename_line);
+		img = HOGAdaboostDetectShow(img_filename_line);
 
 		imshow("People Detector", img);
 
@@ -225,16 +225,15 @@ void Detectors::HOGAdaboostDetectBucleShow(string img_filename_list)
 			break;
 	}
 }
-void Detectors::HOGAdaboostDetectBuclePrint(string img_filename_list)
+void Detectors::HOGAdaboostDetectBuclePrint(string img_filename_list,string folder)
 {
 	ifstream img_filename(img_filename_list);
 	string img_filename_line;
-	
 	while(getline(img_filename, img_filename_line)) {
-		NeighbourhoodMatrix neighbourhood_matrix(HOGSVMDetectPrint(img_filename_line));
+		NeighbourhoodMatrix neighbourhood_matrix(HOGAdaboostDetectPrint(img_filename_line));
 		img_filename_line.erase(img_filename_line.find_last_of("."), string::npos);
 		img_filename_line.erase(0,img_filename_line.find_last_of("/")+1);
-		string file = boost::lexical_cast<string>("out/")+img_filename_line+boost::lexical_cast<string>(".mat");
+		string file = folder+img_filename_line+boost::lexical_cast<string>(".mat");
 		neighbourhood_matrix.WriteNeigbourhoodMatrix(file);
 		cout << file << endl;
 	}

@@ -44,7 +44,7 @@ void Classifiers::SVMTrain(Mat descriptors, Mat labels, CvSVMParams params_, str
 }
 
 //SVM Linear parametros por defecto
-CvSVMParams Classifiers::AdaboostDefaultParams()
+CvBoostParams Classifiers::AdaboostDefaultParams()
 {
 	CvBoostParams params;
 	params.boost_type = CvBoost::REAL;

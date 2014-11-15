@@ -27,7 +27,7 @@ private:
 public:
 	//Constructor
 	Detectors(void);
-	Detectors(HOGDescriptor, string);
+	Detectors(HOGDescriptor);
 	Detectors(const Detectors&);
 	//Loaders
 	void LoadSVM(string);
@@ -39,7 +39,7 @@ public:
 	NeighbourhoodMatrix HOGSVMDetectPrint(string, string);
 	//Deteccion con HOG+SVM bucle
 	void HOGSVMDetectBucleShow(string);
-	void HOGSVMDetectBuclePrint(string);
+	void HOGSVMDetectBuclePrint(string,string);
 	//Deteccion con HOG+Adaboost unitaria
 	Mat HOGAdaboostDetectShow(string);
 	Mat HOGAdaboostDetectShow(string, string);
@@ -47,7 +47,7 @@ public:
 	NeighbourhoodMatrix HOGAdaboostDetectPrint(string, string);
 	//Deteccion con HOG+Adaboost bucle
 	void HOGAdaboostDetectBucleShow(string);
-	void HOGAdaboostDetectBuclePrint(string);
+	void HOGAdaboostDetectBuclePrint(string,string);
 
 
 

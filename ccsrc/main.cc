@@ -23,7 +23,7 @@ HOGDescriptor get_default_hog_decriptor();
 int main(int argc, char** argv)
 {
 	
-	cout << "Computing Descriptors..." << endl;
+	/*cout << "Computing Descriptors..." << endl;
 
 	Descriptors dc;
 	string filename_pos(argv[1]);	
@@ -35,10 +35,12 @@ int main(int argc, char** argv)
 
 	cout << "Training & Saving Classifiers..." << endl;	
 
-	Classifiers classifier;
-	classifier.AdaboostTrain(hog_decriptors,hog_labels,"hog_adaboost.xml");
+	Classifiers svm;
+	svm.SVMTrain(hog_decriptors,hog_labels,"hog_adaboost.xml");
+	Classifiers ada;
+	ada.AdaboostTrain(hog_decriptors,hog_labels,"hog_adaboost.xml");
 
-	cout << "Done." << endl;
+	cout << "Done." << endl;*/
 	
 	cout << "Detecting People..." << endl;
 
@@ -46,7 +48,7 @@ int main(int argc, char** argv)
 	Detectors detectors(cd.DefaultHOGDescriptor());
 	detectors.LoadAdaboost("hog_adaboost.xml");
 	string imgs(argv[3]);	
-	detectors.HOGSVMDetectBuclePrint(imgs);
+	detectors.HOGAdaboostDetectBucleShow(imgs);
 
 	cout << "Done." << endl;
 
