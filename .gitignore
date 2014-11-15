@@ -62,6 +62,7 @@ Test/
 Train/
 train/
 out/
+outAdaboost/
 test_64x128_H96/
 train_64x128_H96/
 pruebas/
