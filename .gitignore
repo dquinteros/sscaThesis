@@ -56,16 +56,13 @@ sftp-config.json
 
 
 ### Project Specific ###
-70X134H96/
-96X160H96/
-Test/
-Train/
-train/
+INRIAPerson/
+list_files/
 out/
-test_64x128_H96/
-train_64x128_H96/
+outAdaboost/
 pruebas/
 octave*
+*.mat
 *.xml
 *.png
 *.lst
