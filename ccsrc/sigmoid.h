@@ -18,5 +18,4 @@ public:
 	void SigmoidTrain(vector<float>,vector<bool>,int,int);
 };
 
-
 #endif // SIGMOID_H
