@@ -59,7 +59,7 @@ void Sigmoid::SigmoidTrain(vector<float> out,vector<bool> target,int prior1,int 
 		    	double p = 1/(1+exp(out[i] * A + B));
 		    	pp[i] = p;
 		    	if(p!=0)
-		    		err -= t * log(p) + (1-t) * log(1-p);
+		    		err -= t * log(p) + (1-t) * log(1-p)
 		    	else
 		    		err -= t * -200 + (1-t) * -200;
 		    }

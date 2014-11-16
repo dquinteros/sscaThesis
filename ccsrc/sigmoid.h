@@ -8,6 +8,7 @@
 
 using namespace std;
 
+
 class Sigmoid {
 private:
 	double A;
@@ -19,6 +20,5 @@ public:
 	double get_b(void){return this->B;}
 	void SigmoidTrain(vector<float>,vector<bool>,int,int);
 };
-
 
 #endif // SIGMOID_H
