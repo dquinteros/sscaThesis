@@ -15,7 +15,7 @@ void Sigmoid::SigmoidTrain(vector<float> out,vector<bool> target,int prior1,int 
 	double loTarget = 1/(prior0+2);
 	double lambda = 1e-3;
 	double olderr =  1e300;
-	vetor<double> pp (target.size(),(prior1+1)/(prior1+prior0+2));
+	vector<double> pp (target.size(),(prior1+1)/(prior1+prior0+2));
 	long count = 0;
 
 	for (int i = 1; i <= 100; i++)
@@ -59,7 +59,7 @@ void Sigmoid::SigmoidTrain(vector<float> out,vector<bool> target,int prior1,int 
 		    	double p = 1/(1+exp(out[i] * A + B));
 		    	pp[i] = p;
 		    	if(p!=0)
-		    		err -= t * log(p) + (1-t) * log(1-p)
+		    		err -= t * log(p) + (1-t) * log(1-p);
 		    	else
 		    		err -= t * -200 + (1-t) * -200;
 		    }

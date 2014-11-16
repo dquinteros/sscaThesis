@@ -4,7 +4,9 @@
 #include <iomanip>
 #include <iostream>
 #include <vector>
-#include <math.h>
+#include <cmath>
+
+using namespace std;
 
 class Sigmoid {
 private:
@@ -13,8 +15,8 @@ private:
 public:
 	Sigmoid(void);
 	//Getters
-	double get_a(void){return this->A}
-	double get_b(void){return this->B}
+	double get_a(void){return this->A;}
+	double get_b(void){return this->B;}
 	void SigmoidTrain(vector<float>,vector<bool>,int,int);
 };
 
