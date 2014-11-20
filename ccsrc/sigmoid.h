@@ -15,10 +15,12 @@ private:
 	double B;
 public:
 	Sigmoid(void);
+	Sigmoid(Sigmoid);
 	//Getters
 	double get_a(void){return this->A;}
 	double get_b(void){return this->B;}
 	void SigmoidTrain(vector<float>,vector<bool>,int,int);
+	float EvaluateSigmoid(float f);
 };
 
 #endif // SIGMOID_H

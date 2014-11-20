@@ -67,7 +67,7 @@ Mat Detectors::HOGSVMDetectShow(string filename, string svm_model)
 	return HOGSVMDetectShow(filename);
 }
 //
-NeighbourhoodMatrix Detectors::HOGSVMDetectPrint(string filename)
+NeighbourhoodMatrix Detectors::HOGSVMDetectPrint(string filename, Sigmoid sig)
 {
 	Mat img;
 	img = imread(filename);
@@ -90,17 +90,17 @@ NeighbourhoodMatrix Detectors::HOGSVMDetectPrint(string filename)
 			{
 				crop_hog.at<float>(0,i) = descriptor_result[i];
 			}
-			float result = SVM.predict(crop_hog,true);
+			float result = sig.EvaluateSigmoid(SVM.predict(crop_hog,true));
 			matrix[y-3][x-3] = (double)result;			
 		}
 	}
 	NeighbourhoodMatrix neighbourhood_matrix(matrix);
 	return neighbourhood_matrix;
 }
-NeighbourhoodMatrix Detectors::HOGSVMDetectPrint(string filename, string svm_model)
+NeighbourhoodMatrix Detectors::HOGSVMDetectPrint(string filename, string svm_model, Sigmoid sig)
 {
 	this->SVM.load(svm_model.c_str());
-	return HOGSVMDetectPrint(filename);
+	return HOGSVMDetectPrint(filename, sig);
 }
 //Deteccion con SVM bucle
 void Detectors::HOGSVMDetectBucleShow(string img_filename_list)
@@ -120,13 +120,13 @@ void Detectors::HOGSVMDetectBucleShow(string img_filename_list)
 			break;
 	}
 }
-void Detectors::HOGSVMDetectBuclePrint(string img_filename_list, string folder)
+void Detectors::HOGSVMDetectBuclePrint(string img_filename_list, string folder, Sigmoid sig)
 {
 	ifstream img_filename(img_filename_list);
 	string img_filename_line;
 	
 	while(getline(img_filename, img_filename_line)) {
-		NeighbourhoodMatrix neighbourhood_matrix(HOGSVMDetectPrint(img_filename_line));
+		NeighbourhoodMatrix neighbourhood_matrix(HOGSVMDetectPrint(img_filename_line, sig));
 		img_filename_line.erase(img_filename_line.find_last_of("."), string::npos);
 		img_filename_line.erase(0,img_filename_line.find_last_of("/")+1);
 		string file = folder+img_filename_line+boost::lexical_cast<string>(".mat");
@@ -172,7 +172,7 @@ Mat Detectors::HOGAdaboostDetectShow(string filename, string boost_model)
 	return HOGAdaboostDetectShow(filename);
 }
 //
-NeighbourhoodMatrix Detectors::HOGAdaboostDetectPrint(string filename)
+NeighbourhoodMatrix Detectors::HOGAdaboostDetectPrint(string filename, Sigmoid sig)
 {
 	Mat img;
 	img = imread(filename);
@@ -195,17 +195,17 @@ NeighbourhoodMatrix Detectors::HOGAdaboostDetectPrint(string filename)
 			{
 				crop_hog.at<float>(0,i) = descriptor_result[i];
 			}
-			float result = boost.predict(crop_hog,Mat(),Range::all(),false,false);
+			float result = sig.EvaluateSigmoid(boost.predict(crop_hog,Mat(),Range::all(),false,false));
 			matrix[y-3][x-3] = (double)result;			
 		}
 	}
 	NeighbourhoodMatrix neighbourhood_matrix(matrix);
 	return neighbourhood_matrix;
 }
-NeighbourhoodMatrix Detectors::HOGAdaboostDetectPrint(string filename, string boost_model)
+NeighbourhoodMatrix Detectors::HOGAdaboostDetectPrint(string filename, string boost_model, Sigmoid sig)
 {
 	this->boost.load(boost_model.c_str());
-	return HOGAdaboostDetectPrint(filename);
+	return HOGAdaboostDetectPrint(filename, sig);
 }
 //Deteccion con SVM bucle
 void Detectors::HOGAdaboostDetectBucleShow(string img_filename_list)
@@ -225,12 +225,12 @@ void Detectors::HOGAdaboostDetectBucleShow(string img_filename_list)
 			break;
 	}
 }
-void Detectors::HOGAdaboostDetectBuclePrint(string img_filename_list,string folder)
+void Detectors::HOGAdaboostDetectBuclePrint(string img_filename_list,string folder, Sigmoid sig)
 {
 	ifstream img_filename(img_filename_list);
 	string img_filename_line;
 	while(getline(img_filename, img_filename_line)) {
-		NeighbourhoodMatrix neighbourhood_matrix(HOGAdaboostDetectPrint(img_filename_line));
+		NeighbourhoodMatrix neighbourhood_matrix(HOGAdaboostDetectPrint(img_filename_line, sig));
 		img_filename_line.erase(img_filename_line.find_last_of("."), string::npos);
 		img_filename_line.erase(0,img_filename_line.find_last_of("/")+1);
 		string file = folder+img_filename_line+boost::lexical_cast<string>(".mat");

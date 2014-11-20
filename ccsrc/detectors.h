@@ -16,6 +16,7 @@
 
 #include "annotation.h"
 #include "neighbourhood_matrix.h"
+#include "sigmoid.h"
 
 using namespace cv;
 
@@ -33,25 +34,21 @@ public:
 	void LoadSVM(string);
 	void LoadAdaboost(string);
 	//Deteccion con HOG+SVM unitaria
-	Mat HOGSVMDetectShow(string);
+	Mat HOGSVMDetectShow(string, Sigmoid);
 	Mat HOGSVMDetectShow(string, string);
-	NeighbourhoodMatrix HOGSVMDetectPrint(string);
-	NeighbourhoodMatrix HOGSVMDetectPrint(string, string);
+	NeighbourhoodMatrix HOGSVMDetectPrint(string, Sigmoid);
+	NeighbourhoodMatrix HOGSVMDetectPrint(string, string, Sigmoid);
 	//Deteccion con HOG+SVM bucle
 	void HOGSVMDetectBucleShow(string);
-	void HOGSVMDetectBuclePrint(string,string);
+	void HOGSVMDetectBuclePrint(string,string, Sigmoid);
 	//Deteccion con HOG+Adaboost unitaria
 	Mat HOGAdaboostDetectShow(string);
 	Mat HOGAdaboostDetectShow(string, string);
-	NeighbourhoodMatrix HOGAdaboostDetectPrint(string);
-	NeighbourhoodMatrix HOGAdaboostDetectPrint(string, string);
+	NeighbourhoodMatrix HOGAdaboostDetectPrint(string, Sigmoid);
+	NeighbourhoodMatrix HOGAdaboostDetectPrint(string, string, Sigmoid);
 	//Deteccion con HOG+Adaboost bucle
 	void HOGAdaboostDetectBucleShow(string);
-	void HOGAdaboostDetectBuclePrint(string,string);
-
-
-
-
+	void HOGAdaboostDetectBuclePrint(string,string, Sigmoid);
 };
 
 #endif // DETECTORS_H

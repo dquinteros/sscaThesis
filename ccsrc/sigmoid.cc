@@ -6,6 +6,13 @@ Sigmoid::Sigmoid(void)
 
 }
 
+//Constructor Copia
+Sigmoid::Sigmoid(Sigmoid s)
+{
+	this->A = s.A;
+	this->B = s.B;
+}
+
 //Train Sigmoid Jhon C. Platt (1999)
 void Sigmoid::SigmoidTrain(vector<float> out,vector<bool> target,int prior1,int prior0)
 {
@@ -85,4 +92,9 @@ void Sigmoid::SigmoidTrain(vector<float> out,vector<bool> target,int prior1,int 
 			break;
 	}
 
+}
+
+float Sigmoid::EvaluateSigmoid(float f)
+{
+	return 1.0/(1.0+exp(A*f+B));
 }

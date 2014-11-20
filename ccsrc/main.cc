@@ -23,18 +23,10 @@ typedef struct DescriptorVector{
 	int height; 
 } DescriptorVector;
 
-
-typedef struct SigmoidConstants{
-	double A;
-	double B;
-	int width;
-	int height; 
-} SigmoidConstants;
-
-
 vector<DescriptorVector> getDescriptors(string filename_pos, string filename_neg);
 vector<string> trainClassifiers(vector<DescriptorVector> descriptors);
 vector<string> traingSigmoid(vector<DescriptorVector> descriptors,  vector<string> models);
+void DetectionBucle();
 //int printversion();
 
 int main(int argc, char** argv)
@@ -214,3 +206,5 @@ vector<string> traingSigmoid(vector<DescriptorVector> descriptors,  vector<strin
 	}
 	
 }
+
+voi
