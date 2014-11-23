@@ -53,6 +53,8 @@ Mat Descriptors::ComputeHOG(string pos_filename, string neg_filename )
 
 		while(getline(file_pos, file_line))
 		{
+			
+			cout << file_line << endl;
 			//cout << file_line << endl;
 			img = imread(file_line);
 
@@ -66,6 +68,7 @@ Mat Descriptors::ComputeHOG(string pos_filename, string neg_filename )
 		}
 
 		int rows_pos = descriptor_vector.size();
+		cout <<"	"<<rows_pos << endl;
 		srand(getTickCount());
 
 		cout << "	Negative " << hog_width << "x" << hog_height << " images..." << endl; 

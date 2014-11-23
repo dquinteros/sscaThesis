@@ -26,6 +26,7 @@ public:
 	int get_width(void){return this->width;}
 	int get_height(void){return this->height;}
 	//Training & Evaluate
+	void SigmoidTrainLin(vector<float>,vector<bool>,int,int);
 	void SigmoidTrain(vector<float>,vector<bool>,int,int);
 	float EvaluateSigmoid(float f);
 };

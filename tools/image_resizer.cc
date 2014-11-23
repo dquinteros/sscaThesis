@@ -9,7 +9,7 @@
 
 #include "../ccsrc/annotation.h"
 
-#define BORDER 300
+#define BORDER 800
 
 using namespace std;
 using namespace cv;
@@ -58,8 +58,8 @@ int main(int argc, char** argv)
 			//rectangle(img, roi.tl(), roi.br(), cv::Scalar(0,255,0), 1);
             if(atoi(argv[6])!=1)
             {
-            int x = img.cols * (percentage/100);
-            int y = img.rows * (percentage/100);
+            int x = roi.width * (percentage/100);
+            int y = roi.height * (percentage/100);
 
              Rect nroi(BORDER+roi.x-x,BORDER+roi.y-y,roi.width+(2*x),roi.height+(2*y));
 

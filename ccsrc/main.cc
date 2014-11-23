@@ -126,7 +126,7 @@ vector<TrainSet> getDescriptors(string filename_pos, string filename_neg)
 
 		TrainSet v;
 
-		string name_pos = list_file_pos;
+		string positive = list_file_pos;
 
 		vector<string> sp_list_file;
 		list_file_pos.erase(list_file_pos.find_last_of("."), string::npos);
@@ -141,8 +141,9 @@ vector<TrainSet> getDescriptors(string filename_pos, string filename_neg)
 		hog.blockStride = Size(8,8);
 		hog.cellSize = Size(8,8);
 
-		Descriptors dc(hog);		
-		Mat hog_descriptors(dc.ComputeHOG(name_pos,list_file_neg));
+		Descriptors dc(hog);	
+		cout << positive << endl;
+		Mat hog_descriptors(dc.ComputeHOG(positive,list_file_neg));
 		Mat hog_labels(dc.get_labels());
 
 		v.labels = hog_labels;
@@ -203,11 +204,10 @@ vector<Sigmoid> trainSigmoid(vector<TrainSet> trainsets,  vector<string> models,
 		int prior1 = 0;
 		int prior0 = 0;
 
-		vector<vector<float>> descriptor_vector(rows, vector<float>(cols,0.0));
-		vector<bool> target(rows,false);
+		vector<bool> target(hog_mat.rows,false);
 
 		cout << "Evaluating " << cols << "x" << rows << " train set..." << endl; 
-		for (int x = 0; x < rows; x++)
+		for (int x = 0; x < hog_mat.rows; x++)
 		{
 			if(hog_label_mat.at<float>(x,0)==1){
 				target[x] = true;
@@ -233,7 +233,8 @@ vector<Sigmoid> trainSigmoid(vector<TrainSet> trainsets,  vector<string> models,
 		count++;
 		cout << "Training using " << cols << "x" << rows << " train set..." << endl; 
 		Sigmoid sigmoid(cols,rows);
-		sigmoid.SigmoidTrain(results,target,prior1,prior0);	
+		sigmoid.SigmoidTrainLin(results,target,prior1,prior0);	
+		cout << "A: " << sigmoid.get_a() << " - B: " << sigmoid.get_b() << endl;
 		trained_sigmoids.push_back(sigmoid);
 	}
 	return trained_sigmoids;	
