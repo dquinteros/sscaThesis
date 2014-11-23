@@ -34,7 +34,7 @@ public:
 	void LoadSVM(string);
 	void LoadAdaboost(string);
 	//Deteccion con HOG+SVM unitaria
-	Mat HOGSVMDetectShow(string, Sigmoid);
+	Mat HOGSVMDetectShow(string);
 	Mat HOGSVMDetectShow(string, string);
 	NeighbourhoodMatrix HOGSVMDetectPrint(string, Sigmoid);
 	NeighbourhoodMatrix HOGSVMDetectPrint(string, string, Sigmoid);

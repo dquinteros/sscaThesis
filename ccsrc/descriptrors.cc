@@ -37,6 +37,8 @@ Mat Descriptors::ComputeHOG(string pos_filename, string neg_filename )
 	int hog_width = hog.winSize.width;
 	int hog_height = hog.winSize.height;
 
+	cout << "Analyzing " << hog_width << "x" << hog_height << " images..." << endl; 
+
 	if(!file_pos || !file_neg)
 	{		
 		fprintf( stderr, "ERROR:Specified files could not be loaded\n");		
@@ -46,6 +48,9 @@ Mat Descriptors::ComputeHOG(string pos_filename, string neg_filename )
 		Mat img;		
 		vector<vector<float>> descriptor_vector;
 		vector<float> descriptor_result;
+
+		cout << "	Positive " << hog_width << "x" << hog_height << " images..." << endl; 
+
 		while(getline(file_pos, file_line))
 		{
 			//cout << file_line << endl;
@@ -62,6 +67,9 @@ Mat Descriptors::ComputeHOG(string pos_filename, string neg_filename )
 
 		int rows_pos = descriptor_vector.size();
 		srand(getTickCount());
+
+		cout << "	Negative " << hog_width << "x" << hog_height << " images..." << endl; 
+
 		while(getline(file_neg, file_line))
 		{
 			//cout << file_line << endl;
@@ -70,14 +78,16 @@ Mat Descriptors::ComputeHOG(string pos_filename, string neg_filename )
 			if(!img.data)
 				continue;
 
-			for(int i = 0; i < 10; i++) {
-				int x = rand() % (img.cols-3-hog_width) + 3; 
-				int y = rand() % (img.rows-3-hog_height) + 3; 
-				Rect roi(x, y, hog_width, hog_height);
-				Mat resized_img  = img(roi);
+			if(img.rows+6>hog_height && img.cols+6>hog_width){
+				for(int i = 0; i < 10; i++) {
+					int x = rand() % (img.cols-3-hog_width) + 3; 
+					int y = rand() % (img.rows-3-hog_height) + 3; 
+					Rect roi(x, y, hog_width, hog_height);
+					Mat resized_img  = img(roi);
 				//resize(img,resized_img,cv::Size(64, 128));
-				hog.compute(resized_img,descriptor_result);
-				descriptor_vector.push_back(descriptor_result);	
+					hog.compute(resized_img,descriptor_result);
+					descriptor_vector.push_back(descriptor_result);	
+				}
 			}			
 		}
 
@@ -85,7 +95,7 @@ Mat Descriptors::ComputeHOG(string pos_filename, string neg_filename )
 		int cols = descriptor_result.size();
 
 		int rows_neg = rows - rows_pos;
-
+		cout <<"	"<<rows_neg << endl;
 		vector<float> hog_label(rows_pos,1.0); 
 		vector<float> hog_label_neg(rows_neg,-1.0); 
 		hog_label.insert(hog_label.end(),hog_label_neg.begin(), hog_label_neg.end());
@@ -109,5 +119,5 @@ Mat Descriptors::ComputeHOG(string pos_filename, string neg_filename )
 
 	Mat nullMat;
 	return nullMat;
-	
+
 }

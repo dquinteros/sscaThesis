@@ -4,7 +4,7 @@ CC = g++
 #  -g    adds debugging information to the executable file
 #  -Wall turns on most, but not all, compiler warnings
 CFLAGS  = -O4 -std=c++11 -ggdb `pkg-config --cflags opencv`
-CVFLAGS = `pkg-config --libs opencv`
+CVFLAGS = `pkg-config --libs opencv` -lboost_program_options 
 
 # the build target executable:
 TARGET = main

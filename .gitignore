@@ -60,6 +60,8 @@ INRIAPerson/
 list_files/
 out/
 outAdaboost/
+svm*/
+boost*/
 pruebas/
 octave*
 *.mat

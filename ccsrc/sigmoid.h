@@ -13,12 +13,19 @@ class Sigmoid {
 private:
 	double A;
 	double B;
+	int width;
+	int height;
 public:
+	//Constructors
 	Sigmoid(void);
-	Sigmoid(Sigmoid);
+	Sigmoid(int,int);
+	Sigmoid(const Sigmoid&);
 	//Getters
 	double get_a(void){return this->A;}
 	double get_b(void){return this->B;}
+	int get_width(void){return this->width;}
+	int get_height(void){return this->height;}
+	//Training & Evaluate
 	void SigmoidTrain(vector<float>,vector<bool>,int,int);
 	float EvaluateSigmoid(float f);
 };

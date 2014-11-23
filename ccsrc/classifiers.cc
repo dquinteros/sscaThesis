@@ -12,6 +12,12 @@ Classifiers::Classifiers(CvSVMParams params_)
 	this->svm_params = params_;
 }
 
+//Construxtor General
+Classifiers::Classifiers(CvBoostParams params_)
+{
+	this->boost_params = params_;
+}
+
 //Cosntructor copia
 Classifiers::Classifiers(const Classifiers& Classifiers_)
 {

@@ -1,5 +1,5 @@
 #!/bin/sh
-make clean && make && ./main.o list_files/pos.lst list_files/neg.lst list_files/pos_normalized_64_128.lst list_files/train_list_files.lst
+make clean && make && ./main.o -p list_files/train_pos_list_files.lst -n list_files/train_neg_list_files.lst -c svm -t list_files/test_pos_list_files.lst
 #for i in pruebas/*.mat; do
 #	    python pysrc/statsValue.py $i
 #donein

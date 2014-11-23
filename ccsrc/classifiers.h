@@ -20,10 +20,12 @@ using namespace cv;
 class Classifiers {
 private:
 	CvSVMParams svm_params;
+	CvBoostParams boost_params;
 public:
 	//Constructores
 	Classifiers(void);
 	Classifiers(CvSVMParams);
+	Classifiers(CvBoostParams);
 	Classifiers(const Classifiers&);
 	//SVM default Params
 	CvSVMParams LinearSVMDefaultParams(void);
