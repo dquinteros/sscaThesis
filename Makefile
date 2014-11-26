@@ -4,21 +4,24 @@ CC = g++
 #  -g    adds debugging information to the executable file
 #  -Wall turns on most, but not all, compiler warnings
 CFLAGS  = -O4 -std=c++11 -ggdb `pkg-config --cflags opencv`
-CVFLAGS = `pkg-config --libs opencv` -lboost_program_options 
-
+CVFLAGS = `pkg-config --libs opencv` 
+PO = -lboost_program_options 
 # the build target executable:
 TARGET = main
 
 all:  $(TARGET)
 
 $(TARGET):  ccsrc/$(TARGET).cc
-	$(CC) $(CFLAGS) -o $(TARGET).o ccsrc/*.cc $(CVFLAGS)
+	$(CC) $(CFLAGS) -o $(TARGET).o ccsrc/*.cc $(CVFLAGS) $(PO)
 
 hogtest:  tools/hogTest.cc
 	$(CC) $(CFLAGS) -o hogTest.o tools/hogTest.cc $(CVFLAGS)
 
 resize:  tools/image_resizer.cc
 	$(CC) $(CFLAGS) -o image_resizer.o tools/image_resizer.cc ccsrc/annotation.cc $(CVFLAGS)
+
+negative:  tools/negativeExtractor.cc
+	$(CC) $(CFLAGS) -o negativeExtractor.o tools/negativeExtractor.cc $(CVFLAGS)
 
 mean:  tools/meanSizeObject.cc
 	$(CC) $(CFLAGS) -o meanSizeObject.o tools/meanSizeObject.cc ccsrc/annotation.cc $(CVFLAGS)	

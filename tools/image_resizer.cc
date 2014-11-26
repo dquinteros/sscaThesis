@@ -91,7 +91,7 @@ int main(int argc, char** argv)
             Rect cutter(new_x-16,new_y-16,abs_width+32,abs_height+32);
             Mat crop = img_extended(cutter);
 
-            imwrite(basename+string("/")+img_filename+to_string(i)+ext,crop);
+            imwrite(basename+string("/")+img_filename+ext,crop);
         }
 
 			//int x_new = (crop.cols/2)-(abs_width/2);
