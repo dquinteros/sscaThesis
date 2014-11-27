@@ -40,7 +40,7 @@ int main(int argc, char** argv)
 		if(!img.data)
 			continue;
 		if(img.rows+6>hog_height && img.cols+6>hog_width){
-			for(int i = 0; i < 30; i++) {
+			for(int i = 0; i < 10; i++) {
 				int x = rand() % (img.cols-3-hog_width) + 3; 
 				int y = rand() % (img.rows-3-hog_height) + 3; 
 				Rect roi(x, y, hog_width, hog_height);

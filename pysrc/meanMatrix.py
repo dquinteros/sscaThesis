@@ -14,10 +14,11 @@ line = lst.readline()
 Z = np.empty(shape=[250,122])
 count = 0
 while line:
+	print line
 	Z += np.loadtxt(line.rstrip('\n'));
 	count = count+1
 	line = lst.readline()
   
 F = Z/count
 
-np.savetxt("SVM_Result.mat",F)
+np.savetxt("SVM_Result_64_128.mat",F)

@@ -53,8 +53,7 @@ Mat Descriptors::ComputeHOG(string pos_filename, string neg_filename )
 
 		while(getline(file_pos, file_line))
 		{
-			
-			cout << file_line << endl;
+		
 			//cout << file_line << endl;
 			img = imread(file_line);
 
@@ -68,7 +67,7 @@ Mat Descriptors::ComputeHOG(string pos_filename, string neg_filename )
 		}
 
 		int rows_pos = descriptor_vector.size();
-		cout <<"	"<<rows_pos << endl;
+		cout <<"	"<<rows_pos << " images" << endl;
 		srand(getTickCount());
 
 		cout << "	Negative " << hog_width << "x" << hog_height << " images..." << endl; 
@@ -80,47 +79,44 @@ Mat Descriptors::ComputeHOG(string pos_filename, string neg_filename )
 
 			if(!img.data)
 				continue;
+			
 
-			if(img.rows+6>hog_height && img.cols+6>hog_width){
-				for(int i = 0; i < 10; i++) {
-					int x = rand() % (img.cols-3-hog_width) + 3; 
-					int y = rand() % (img.rows-3-hog_height) + 3; 
-					Rect roi(x, y, hog_width, hog_height);
-					Mat resized_img  = img(roi);
-				//resize(img,resized_img,cv::Size(64, 128));
-					hog.compute(resized_img,descriptor_result);
-					descriptor_vector.push_back(descriptor_result);	
-				}
-			}			
-		}
+			Mat resized_img;
+			resize(img,resized_img,hog.winSize);
+			//resize(img,resized_img,cv::Size(64, 128));
+			hog.compute(resized_img,descriptor_result);
+			descriptor_vector.push_back(descriptor_result);	
 
-		int rows = descriptor_vector.size();
-		int cols = descriptor_result.size();
+		}			
+	
 
-		int rows_neg = rows - rows_pos;
-		cout <<"	"<<rows_neg << endl;
-		vector<float> hog_label(rows_pos,1.0); 
-		vector<float> hog_label_neg(rows_neg,-1.0); 
-		hog_label.insert(hog_label.end(),hog_label_neg.begin(), hog_label_neg.end());
+	int rows = descriptor_vector.size();
+	int cols = descriptor_result.size();
 
-		Mat hog_mat = Mat(rows, cols, CV_32FC1);
-		Mat hog_label_mat = Mat(rows,1,CV_32FC1);
+	int rows_neg = rows - rows_pos;
+	cout <<"	"<<rows_neg << " images" << endl;
+	vector<float> hog_label(rows_pos,1.0); 
+	vector<float> hog_label_neg(rows_neg,-1.0); 
+	hog_label.insert(hog_label.end(),hog_label_neg.begin(), hog_label_neg.end());
 
-		for (int x = 0; x < rows; x++)
+	Mat hog_mat = Mat(rows, cols, CV_32FC1);
+	Mat hog_label_mat = Mat(rows,1,CV_32FC1);
+
+	for (int x = 0; x < rows; x++)
+	{
+		hog_label_mat.at<float>(x,0) = hog_label[x];			
+		for (int y = 0; y < cols; y++)
 		{
-			hog_label_mat.at<float>(x,0) = hog_label[x];			
-			for (int y = 0; y < cols; y++)
-			{
-				hog_mat.at<float>(x,y) = descriptor_vector[x][y];
-			}
+			hog_mat.at<float>(x,y) = descriptor_vector[x][y];
 		}
-
-		this->hog_labels = Mat(hog_label_mat);
-		this->hog_descriptors = Mat(hog_mat);		
-		return hog_mat;
 	}
 
-	Mat nullMat;
-	return nullMat;
+	this->hog_labels = Mat(hog_label_mat);
+	this->hog_descriptors = Mat(hog_mat);		
+	return hog_mat;
+}
+
+Mat nullMat;
+return nullMat;
 
 }
