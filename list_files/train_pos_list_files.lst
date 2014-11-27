@@ -1,0 +1,3 @@
+list_files/train_crop_32_64.lst
+list_files/train_crop_64_128.lst
+list_files/train_crop_128_256.lst
