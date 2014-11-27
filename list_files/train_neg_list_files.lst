@@ -1,3 +1,2 @@
-list_files/train_neg_32_64.lst
-list_files/train_neg_64_128.lst
 list_files/train_neg_128_256.lst
+list_files/train_neg_256_512.lst
