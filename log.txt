@@ -1,0 +1,1 @@
+untitled.sublime-workspace:		"/home/dquinteros/Documentos/gitrepo/tesis/INRIAPerson/test_crop_64x128/pos/person_and_bike_0352.png",

@@ -39,7 +39,6 @@ vector<string> trainClassifiers(vector<TrainSet> TrainSets, ClassifierSelector m
 vector<Sigmoid> trainSigmoid(vector<TrainSet> TrainSets,  vector<string> models, ClassifierSelector ml);
 void DetectionBucle(string img_list, vector<Sigmoid> sigmoids,vector<string> models, ClassifierSelector ml);
 HOGDescriptor GenerateHOG(int width, int height);
-//int printversion();
 
 int main(int argc, char** argv)
 {
@@ -84,12 +83,13 @@ int main(int argc, char** argv)
 		{
 			ml = SVM_CLASSIFIER;
 		}
-		else if(clf.compare("boost"))
+		else if(clf.compare("boost")==0)
 		{
 			ml = BOOST_CLASSIFIER;
 		}
 		else
 		{
+			cout << "svm and boost classifiers are supported\n" ;
 			return 1;
 		}
 
@@ -205,6 +205,14 @@ vector<Sigmoid> trainSigmoid(vector<TrainSet> trainsets,  vector<string> models,
 		int prior0 = 0;
 
 		vector<bool> target(hog_mat.rows,false);
+		
+		CvSVM SVM;
+		CvBoost boost;
+		if(ml==SVM_CLASSIFIER){				
+			SVM.load(models.at(count).c_str());
+		} else if (ml == BOOST_CLASSIFIER){
+			boost.load(models.at(count+1).c_str());
+		}
 
 		cout << "Evaluating " << cols << "x" << rows << " train set..." << endl; 
 		for (int x = 0; x < hog_mat.rows; x++)
@@ -219,13 +227,9 @@ vector<Sigmoid> trainSigmoid(vector<TrainSet> trainsets,  vector<string> models,
 			Mat desc = hog_mat.row(x);
 
 			if(ml==SVM_CLASSIFIER){
-				CvSVM SVM;	
-				SVM.load(models.at(count).c_str());
 				float r = SVM.predict(desc,true);
 				results.push_back(r);
 			} else if (ml == BOOST_CLASSIFIER){
-				CvBoost boost;
-				boost.load(models.at(count+1).c_str());
 				float e = boost.predict(desc,Mat(),Range::all(),false,true);
 				results.push_back(e);	
 			}
