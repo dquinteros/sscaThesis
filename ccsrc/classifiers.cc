@@ -55,9 +55,9 @@ CvBoostParams Classifiers::AdaboostDefaultParams()
 	CvBoostParams params;
 	params.boost_type = CvBoost::REAL;
     params.weak_count = 100;
-    params.weight_trim_rate = 0.95;
-    params.cv_folds = 0;
-    params.max_depth = 1;
+    params.weight_trim_rate = 0;
+    params.cv_folds = 2;
+    params.max_depth = 3;
 	return params;
 }
 

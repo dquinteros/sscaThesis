@@ -11,7 +11,7 @@ print filename_list
 lst = open(filename_list, "r+")
 
 line = lst.readline()
-Z = np.empty(shape=[250,122])
+Z = np.empty(shape=[122,58])
 count = 0
 while line:
 	print line
@@ -21,4 +21,4 @@ while line:
   
 F = Z/count
 
-np.savetxt("SVM_Result_64_128.mat",F)
+np.savetxt("BOOST_Result_32_64.mat",F)

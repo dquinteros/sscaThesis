@@ -72,30 +72,38 @@ NeighbourhoodMatrix Detectors::HOGSVMDetectPrint(string filename, Sigmoid sig)
 	Mat img;
 	img = imread(filename);
 	NeighbourhoodMatrix null_matrix;
-	if(!img.data)
+	if(!img.data)	
 		return null_matrix;
-	vector<float> descriptor_result;
 	int rows = img.rows-6-hog.winSize.height;
 	int cols = img.cols-6-hog.winSize.width;
 	vector<vector<double>> matrix =  vector<vector<double>>(rows, vector<double>(cols,0.0));
-	for (int x = 3; x < (img.cols-3-hog.winSize.width); x++)
-	{
-		for (int y = 3; y < (img.rows-3-hog.winSize.height); y++)
+	#pragma omp parallel num_threads(20)
+	{	
+		vector<float> descriptor_result;	
+		#pragma omp for schedule(dynamic,rows/40)
+		for (int x = 3; x < (img.cols-3-hog.winSize.width); x++)
 		{
-			Rect roi(x,y,hog.winSize.width,hog.winSize.height);
-			Mat crop = img(roi);
-			hog.compute(crop,descriptor_result);
-			Mat crop_hog = Mat(1,descriptor_result.size(),CV_32FC1);
-			for (int i = 0; i < descriptor_result.size(); i++)
+			
+			for (int y = 3; y < (img.rows-3-hog.winSize.height); y++)
 			{
-				crop_hog.at<float>(0,i) = descriptor_result[i];
+				Rect roi(x,y,hog.winSize.width,hog.winSize.height);
+				Mat crop = img(roi);
+				hog.compute(crop,descriptor_result);
+				Mat crop_hog = Mat(1,descriptor_result.size(),CV_32FC1);
+				for (int i = 0; i < descriptor_result.size(); i++)
+				{
+					crop_hog.at<float>(0,i) = descriptor_result[i];
+				}
+				float result = sig.EvaluateSigmoid(SVM.predict(crop_hog,true));
+				#pragma omp critical				
+				matrix[y-3][x-3] = (double)result;
 			}
-			float result = sig.EvaluateSigmoid(SVM.predict(crop_hog,true));
-			matrix[y-3][x-3] = (double)result;			
 		}
 	}
 	NeighbourhoodMatrix neighbourhood_matrix(matrix);
+
 	return neighbourhood_matrix;
+
 }
 NeighbourhoodMatrix Detectors::HOGSVMDetectPrint(string filename, string svm_model, Sigmoid sig)
 {
@@ -124,7 +132,6 @@ void Detectors::HOGSVMDetectBuclePrint(string img_filename_list, string folder, 
 {
 	ifstream img_filename(img_filename_list);
 	string img_filename_line;
-	
 	while(getline(img_filename, img_filename_line)) {
 		NeighbourhoodMatrix neighbourhood_matrix(HOGSVMDetectPrint(img_filename_line, sig));
 		img_filename_line.erase(img_filename_line.find_last_of("."), string::npos);
@@ -156,7 +163,7 @@ Mat Detectors::HOGAdaboostDetectShow(string filename)
 				crop_hog.at<float>(0,i) = descriptor_result[i];
 			}
 
-			float result = boost.predict(crop_hog,Mat(),Range::all(),false,false);
+			float result = boost.predict(crop_hog,Mat(),Range::all(),false,true);
 
 			Point ce = Point((roi.tl().x+roi.br().x)/2,(roi.tl().y+roi.br().y)/2);
 			line( img, ce,ce, Scalar(0, 0, 255*result),1,8);
@@ -177,29 +184,36 @@ NeighbourhoodMatrix Detectors::HOGAdaboostDetectPrint(string filename, Sigmoid s
 	Mat img;
 	img = imread(filename);
 	NeighbourhoodMatrix null_matrix;
-	if(!img.data)
+	if(!img.data)	
 		return null_matrix;
-	vector<float> descriptor_result;
 	int rows = img.rows-6-hog.winSize.height;
 	int cols = img.cols-6-hog.winSize.width;
 	vector<vector<double>> matrix =  vector<vector<double>>(rows, vector<double>(cols,0.0));
-	for (int x = 3; x < (img.cols-3-hog.winSize.width); x++)
-	{
-		for (int y = 3; y < (img.rows-3-hog.winSize.height); y++)
+	#pragma omp parallel num_threads(30)
+	{	
+		vector<float> descriptor_result;	
+		#pragma omp for schedule(dynamic,rows/40)
+		for (int x = 3; x < (img.cols-3-hog.winSize.width); x++)
 		{
-			Rect roi(x,y,hog.winSize.width,hog.winSize.height);
-			Mat crop = img(roi);
-			hog.compute(crop,descriptor_result);
-			Mat crop_hog = Mat(1,descriptor_result.size(),CV_32FC1);
-			for (int i = 0; i < descriptor_result.size(); i++)
+			
+			for (int y = 3; y < (img.rows-3-hog.winSize.height); y++)
 			{
-				crop_hog.at<float>(0,i) = descriptor_result[i];
+				Rect roi(x,y,hog.winSize.width,hog.winSize.height);
+				Mat crop = img(roi);
+				hog.compute(crop,descriptor_result);
+				Mat crop_hog = Mat(1,descriptor_result.size(),CV_32FC1);
+				for (int i = 0; i < descriptor_result.size(); i++)
+				{
+					crop_hog.at<float>(0,i) = descriptor_result[i];
+				}
+				float result = sig.EvaluateSigmoid(boost.predict(crop_hog,Mat(),Range::all(),false,false));
+				#pragma omp critical				
+				matrix[y-3][x-3] = (double)result;
 			}
-			float result = sig.EvaluateSigmoid(boost.predict(crop_hog,Mat(),Range::all(),false,false));
-			matrix[y-3][x-3] = (double)result;			
 		}
 	}
 	NeighbourhoodMatrix neighbourhood_matrix(matrix);
+
 	return neighbourhood_matrix;
 }
 NeighbourhoodMatrix Detectors::HOGAdaboostDetectPrint(string filename, string boost_model, Sigmoid sig)

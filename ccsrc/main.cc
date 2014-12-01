@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <omp.h>
 
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/objdetect/objdetect.hpp>
@@ -211,7 +212,7 @@ vector<Sigmoid> trainSigmoid(vector<TrainSet> trainsets,  vector<string> models,
 		if(ml==SVM_CLASSIFIER){				
 			SVM.load(models.at(count).c_str());
 		} else if (ml == BOOST_CLASSIFIER){
-			boost.load(models.at(count+1).c_str());
+			boost.load(models.at(count).c_str());
 		}
 
 		cout << "Evaluating " << cols << "x" << rows << " train set..." << endl; 

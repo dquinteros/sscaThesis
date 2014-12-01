@@ -6,6 +6,7 @@
 #include <iostream>
 #include <math.h>
 #include <vector>
+#include <omp.h>
 
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/objdetect/objdetect.hpp>

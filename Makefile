@@ -5,7 +5,7 @@ CC = g++
 #  -Wall turns on most, but not all, compiler warnings
 CFLAGS  = -O4 -std=c++11 -ggdb `pkg-config --cflags opencv`
 CVFLAGS = `pkg-config --libs opencv` 
-PO = -lboost_program_options 
+PO = -lboost_program_options -fopenmp
 # the build target executable:
 TARGET = main
 
