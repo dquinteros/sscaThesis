@@ -25,4 +25,4 @@ To get help
 
 To run 
 
-./main.o -p <Positive trainnig lists of files> -n <Negative trainnig lists of files> -t <Negative trainnig lists of files>  -c <Select Clasifier, svm & boost are supported>
+./main.o -p <<Positive trainnig lists of files>> -n <Negative trainnig lists of files> -t <Negative trainnig lists of files>  -c <<Select Clasifier, svm & boost are supported>>
