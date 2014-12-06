@@ -20,9 +20,10 @@ Usage
 To compile use the make command
 
 To get help
-
+```bash
 ./main.o --help 
-
+```
 To run 
-
-./main.o -p <<Positive trainnig lists of files>> -n <Negative trainnig lists of files> -t <Negative trainnig lists of files>  -c <<Select Clasifier, svm & boost are supported>>
+```bash
+./main.o -p <Positive trainnig lists of files> -n <Negative trainnig lists of files> -t <Negative trainnig lists of files>  -c <Select Clasifier, svm & boost are supported>
+```
