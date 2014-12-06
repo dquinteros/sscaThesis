@@ -14,3 +14,15 @@ The code was been tested for
 - Linux mint 17 / Ubuntu 14.04
 
 
+Usage
+====
+
+To compile use the make command
+
+To get help
+
+./main.o --help 
+
+To run 
+
+./main.o -p <Positive trainnig lists of files> -n <Negative trainnig lists of files> -t <Negative trainnig lists of files>  -c <Select Clasifier, svm & boost are supported>
